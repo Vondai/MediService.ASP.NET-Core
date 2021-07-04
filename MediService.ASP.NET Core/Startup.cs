@@ -1,7 +1,9 @@
 using MediService.ASP.NET_Core.Data;
+using MediService.ASP.NET_Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +30,11 @@ namespace MediService.ASP.NET_Core
             services.AddControllersWithViews();
 
             //Register dbContext
-            services.AddDbContext<MediServiceDbContext>(o => o.UseSqlServer(DatabaseConfiguration.ConnectionString));
+            services.AddDbContext<MediServiceDbContext>(o => 
+                o.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            //Register passwordHasher
+            services.AddTransient<IPasswordHasher, PasswordHasher>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +62,8 @@ namespace MediService.ASP.NET_Core
 
             app.UseRouting();
 
+            //Enable users
+            app.UseAuthorization();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

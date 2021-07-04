@@ -23,6 +23,8 @@ namespace MediService.ASP.NET_Core.Controllers
             return View();
         }
 
+        public IActionResult Faq() => View();
+
         public IActionResult Privacy()
         {
             return View();

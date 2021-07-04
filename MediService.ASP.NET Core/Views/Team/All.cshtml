@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Team";
+}
+
+<div class="card-deck row">
+    @for (int i = 0; i < 10; i++)
+    {
+        <div class="col-sm-3">
+            <div class="card">
+                <img class="card-img-top" src="~/img/1.jpg" alt="Some specialist">
+                <div class="card-body">
+                    <h5 class="card-title">John Smith MD.</h5>
+                    <p class="card-text">Jonathan leads the work of the Global Health Programme, and joined the programme in 2019. Jonathan’s background is in public health, and he has extensive experience of working in with governments.</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">
+                        Services:
+                        @for (int j = 0; j < 5; j++)
+                        {
+                            <span>Massage</span>
+                        }
+                    </small>
+                </div>
+            </div>
+        </div>
+    }
+</div>

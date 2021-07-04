@@ -4,14 +4,16 @@ using MediService.ASP.NET_Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MediService.ASP.NET_Core.Data.Migrations
 {
     [DbContext(typeof(MediServiceDbContext))]
-    partial class MediServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210704204224_FixedSubsciptionIdColumnInUser")]
+    partial class FixedSubsciptionIdColumnInUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

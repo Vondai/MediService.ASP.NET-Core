@@ -37,7 +37,7 @@ namespace MediService.ASP.NET_Core.Data.Models
 
         public Specialist Specialist { get; init; }
 
-        public int SubscriptionId { get; init; }
+        public int? SubscriptionId { get; init; }
 
         public Subscription Subscription { get; init; }
 
