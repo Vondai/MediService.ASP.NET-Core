@@ -17,6 +17,7 @@ namespace MediService.ASP.NET_Core.Controllers
         public IActionResult All()
         {
             var subscriptions = this.data.Subscriptions
+                .OrderBy(x => x.Price)
                 .Select(s => new SubscriptionViewModel()
                 {
                     Name = s.Name,
