@@ -1,27 +1,23 @@
-﻿using MediService.ASP.NET_Core.Models;
+﻿using MediService.ASP.NET_Core.Data;
+using MediService.ASP.NET_Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MediServiceDbContext data;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, MediServiceDbContext data)
         {
             _logger = logger;
+            this.data = data;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         public IActionResult Faq() => View();
 

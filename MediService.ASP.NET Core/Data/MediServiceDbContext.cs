@@ -1,17 +1,17 @@
 ﻿using MediService.ASP.NET_Core.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediService.ASP.NET_Core.Data
 {
-    public class MediServiceDbContext : DbContext
+    public class MediServiceDbContext : IdentityDbContext<User>
     {
 
         public MediServiceDbContext(DbContextOptions options)
             : base(options)
         {
-        }
 
-        public DbSet<User> Users { get; init; }
+        }
 
         public DbSet<Address> Addresses { get; init; }
 
@@ -41,14 +41,19 @@ namespace MediService.ASP.NET_Core.Data
                 .HasOne(u => u.Specialist)
                 .WithOne(x => x.User)
                 .HasForeignKey<Specialist>(x => x.UserId);
+
+            base.OnModelCreating(modelBuilder);
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(DatabaseConfiguration.ConnectionString);
             }
             base.OnConfiguring(optionsBuilder);
+
         }
     }
 }

@@ -1,35 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace MediService.ASP.NET_Core.Data.Models
 {
-    public class User
+    // Add profile data for application users by adding properties to the User class
+    public class User : IdentityUser
     {
         public User()
         {
-            this.Id = Guid.NewGuid().ToString();
             this.Messages = new HashSet<Message>();
             this.Appointments = new HashSet<Appointment>();
             this.Addresses = new HashSet<Address>();
         }
 
-        public string Id { get; init; }
-
-        [Required]
-        public string Username { get; init; }
-
         [Required]
         public string FullName { get; init; }
-
-        [Required]
-        public string Password { get; init; }
-
-        [Required]
-        public string PhoneNumber { get; init; }
-
-        [Required]
-        public string Email { get; init; }
 
         public bool IsSpecialist { get; init; }
 

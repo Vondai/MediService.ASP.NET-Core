@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MediService.ASP.NET_Core.Data.Models
+﻿namespace MediService.ASP.NET_Core.Data.Models
 {
     public class Address
     {

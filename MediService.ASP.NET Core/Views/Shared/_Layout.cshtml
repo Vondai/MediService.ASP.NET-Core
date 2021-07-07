@@ -13,7 +13,10 @@
             <h4 class="my-0 mr-md-auto font-weight-bolder">
                 <a href="/" class="navbar-expand">MediSevice</a>
             </h4>
-            <span class="navbar-text">Welcome, example@example.com</span>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <span class="navbar-text">Welcome, @User.Identity.Name.</span>
+            }
             <nav class="my-2 my-md-0 mr-md-3">
                 <a class="p-2 text-dark font-weight-bolder" href="/Team/All">The Team</a>
                 <a class="p-2 text-dark font-weight-bolder" href="#">Services</a>
