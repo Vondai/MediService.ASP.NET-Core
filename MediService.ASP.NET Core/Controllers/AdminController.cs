@@ -20,7 +20,6 @@ namespace MediService.ASP.NET_Core.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSubscription(SubscriptionFormModel model)
         {
-            ;
             if (!ModelState.IsValid)
             {
                 return View();

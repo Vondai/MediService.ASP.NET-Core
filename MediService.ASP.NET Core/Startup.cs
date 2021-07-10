@@ -1,14 +1,13 @@
-using MediService.ASP.NET_Core.Data;
-using MediService.ASP.NET_Core.Data.Models;
-using MediService.ASP.NET_Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MediService.ASP.NET_Core.Data;
+using MediService.ASP.NET_Core.Data.Models;
+using MediService.ASP.NET_Core.Infrastructure;
 
 namespace MediService.ASP.NET_Core
 {
@@ -21,7 +20,6 @@ namespace MediService.ASP.NET_Core
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -29,9 +27,6 @@ namespace MediService.ASP.NET_Core
             //Register dbContext
             services.AddDbContext<MediServiceDbContext>(o => 
                 o.UseSqlServer(Configuration.GetConnectionString("Default")));
-
-            //Register passwordHasher
-            services.AddTransient<IPasswordHasher, PasswordHasher>();
 
             //Register Identity Service
             services.AddIdentity<User, IdentityRole>()
@@ -47,17 +42,8 @@ namespace MediService.ASP.NET_Core
                 options.Lockout.AllowedForNewUsers = false;
             });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //ApplyMigration
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<MediServiceDbContext>();
-                dbContext.Database.Migrate();
-            }
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -65,9 +51,11 @@ namespace MediService.ASP.NET_Core
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            //ApplyMigration
+            app.PrepareDatabase();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

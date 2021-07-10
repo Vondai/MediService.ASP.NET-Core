@@ -8,7 +8,7 @@ a.navbar-brand {
 }
 
 header {
-    background-color:beige;
+    background-color: beige;
 }
 
 /* Provide sufficient contrast against white background */
@@ -16,13 +16,6 @@ a {
     color: #0366d6;
 }
 
-/*Form*/
-input {
-    max-width: 70%;
-}
-label {
-    font-size:large;
-}
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
@@ -78,6 +71,7 @@ html {
     position: relative;
     min-height: 100%;
 }
+
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
@@ -92,8 +86,8 @@ body {
     line-height: 40px; /* Vertically center the text there */
 }
 
-/*Team cards max column per row*/
-.row {
+/*Team cards max column per row
+    .row {
     display: flex;
     flex-wrap: wrap;
 }
@@ -101,9 +95,11 @@ body {
 .row > div[class*='col-'] {
     display:flex;
 }
+*/
+
 
 .col-sm-3 {
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 /*Background image*/
 .view {
@@ -124,4 +120,10 @@ body {
 */
 .mb-4 {
     margin: 30px;
+}
+
+
+.heading-margin {
+    margin-top: 20px;
+    margin-bottom: 40px;
 }

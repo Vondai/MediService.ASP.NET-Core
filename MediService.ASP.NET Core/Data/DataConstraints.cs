@@ -39,7 +39,8 @@
 
         //Subscriptions
         public const string SubscriptionMinValue = "0.0";
+        public const string SubscriptionMaxValue = "999.0";
 
-        public const string SubscriptionMaxValue = "100.0";
+        public const string SubscriptionCountServicesNullErrorMessage = "Count of services field is required.";
     }
 }

@@ -1,6 +1,6 @@
-﻿using MediService.ASP.NET_Core.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+using MediService.ASP.NET_Core.Data.Models;
 
 namespace MediService.ASP.NET_Core.Data
 {
@@ -47,13 +47,7 @@ namespace MediService.ASP.NET_Core.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(DatabaseConfiguration.ConnectionString);
-            }
             base.OnConfiguring(optionsBuilder);
-
         }
     }
 }

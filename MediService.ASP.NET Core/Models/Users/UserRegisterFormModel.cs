@@ -18,6 +18,7 @@ namespace MediService.ASP.NET_Core.Models.Users
 
         [Required(ErrorMessage = ConfirmPasswordNullErrorMessage)]
         [Compare(nameof(Password), ErrorMessage = PasswordsDifferentErrorMessage)]
+        [Display(Name ="Confirm Password")]
         public string ConfirmPassword { get; init; }
 
         [Required(ErrorMessage = EmailNullErrorMessage)]
@@ -25,10 +26,12 @@ namespace MediService.ASP.NET_Core.Models.Users
         public string Email { get; init; }
 
         [Required(ErrorMessage = FullNameNullErrorMessage)]
+        [Display(Name = "Full Name")]
         public string FullName { get; init; }
 
         [Required(ErrorMessage = PhoneNullErrorMessage)]
         [RegularExpression(PhoneRegularExpression, ErrorMessage = PhoneWrongFormatErrorMessage)]
+        [Display(Name = "Phone Number")]
         public string Phone { get; init; }
 
         [Required(ErrorMessage = AddressNullErrorMessage)]
