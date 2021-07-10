@@ -13,6 +13,8 @@ namespace MediService.ASP.NET_Core.Data.Models
         }
         public int Id { get; init; }
 
+        [Required]
+        [MaxLength(SubscriptionNameMaxLength)]
         public string Name { get; init; }
 
         [Column(TypeName = "decimal(18, 2)")]

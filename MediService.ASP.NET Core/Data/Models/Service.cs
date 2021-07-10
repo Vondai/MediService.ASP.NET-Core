@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static MediService.ASP.NET_Core.Data.DataConstraints;
 
 namespace MediService.ASP.NET_Core.Data.Models
 {
@@ -14,8 +15,10 @@ namespace MediService.ASP.NET_Core.Data.Models
         public int Id { get; init; }
 
         [Required]
+        [MaxLength(ServiceNameMaxLength)]
         public string Name { get; init; }
 
+        [Required]
         public string Description { get; init; }
 
         public ICollection<Specialist> Specialists { get; init; }

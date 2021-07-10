@@ -1,0 +1,24 @@
+﻿@model ServiceAddFormModel
+
+@{
+    ViewData["Title"] = "Add Service";
+}
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">Add Service</h2>
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input type="text" class="form-control" placeholder="Nursing Care" asp-for="Name">
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea class="form-control" rows="4" placeholder="Most common form of home care" asp-for="Description"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Service</button>
+        </form>
+
+    </div>
+</div>

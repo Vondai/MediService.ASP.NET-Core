@@ -19,7 +19,7 @@
             }
             <nav class="my-2 my-md-0 mr-md-3">
                 <a class="p-2 text-dark font-weight-bolder" href="/Team/All">The Team</a>
-                <a class="p-2 text-dark font-weight-bolder" href="#">Services</a>
+                <a class="p-2 text-dark font-weight-bolder" href="/Services/All">Services</a>
                 <a class="p-2 text-dark font-weight-bolder" href="/Subscriptions/All">Subscriptions</a>
                 <a class="p-2 text-dark font-weight-bolder" href="/Home/Faq">F.A.Q</a>
             </nav>
@@ -43,7 +43,7 @@
 
     <footer class="footer">
         <div class="container">
-            &copy; 2021 - MediService - <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            &copy; @DateTime.UtcNow.Year - MediService - <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

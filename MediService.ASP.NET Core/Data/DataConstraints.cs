@@ -2,7 +2,6 @@
 {
     public static class DataConstraints
     {
-        //User
         //Username
         public const int UsernameMinLength = 5;
         public const int UsernameMaxLength = 15;
@@ -38,9 +37,19 @@
         public const string CityNullErrorMessage = "Please enter a city";
 
         //Subscriptions
-        public const string SubscriptionMinValue = "0.0";
-        public const string SubscriptionMaxValue = "999.0";
+        public const string SubscriptionPriceMinValue = "0.0";
+        public const string SubscriptionPriceMaxValue = "999.0";
+
+        public const int SubsciptionNameMinLength = 5;
+        public const int SubscriptionNameMaxLength = 15;
 
         public const string SubscriptionCountServicesNullErrorMessage = "Count of services field is required.";
+
+        //Services
+
+        public const int ServiceNameMinLength = 5;
+        public const int ServiceNameMaxLength = 30;
+
+        public const int ServiceDescriptionMinLength = 5;
     }
 }
