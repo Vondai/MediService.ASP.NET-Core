@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<ReviewViewModel>
+@{
     ViewData["Title"] = "Home";
 }
 <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
@@ -9,14 +10,23 @@
     </p>
 </div>
 <div class="container">
-    <div class="row">
-        @for (int i = 0; i < 6; i++)
+    <h2>Recent reviews</h2>
+    <div class="card-deck row">
+        @foreach (var review in Model)
         {
             <div class="col-sm-6">
-                <div class="card">
+                <div class="card bg-light">
+                    <div class="card-header bg-info">
+                        <span class="text-white">
+                            @review.Title
+                        </span>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <blockquote class="blockquote mb-0">
+                            <p>@review.Description</p>
+                            <span>Rating: @review.Rating</span>
+                            <footer class="blockquote-footer text-info">Rated by <cite>@review.Username</cite></footer>
+                        </blockquote>
                     </div>
                 </div>
             </div>

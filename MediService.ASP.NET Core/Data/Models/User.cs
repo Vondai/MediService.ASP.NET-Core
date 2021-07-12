@@ -12,6 +12,7 @@ namespace MediService.ASP.NET_Core.Data.Models
             this.Messages = new HashSet<Message>();
             this.Appointments = new HashSet<Appointment>();
             this.Addresses = new HashSet<Address>();
+            this.Reviews = new HashSet<Review>();
         }
 
         [Required]
@@ -32,5 +33,7 @@ namespace MediService.ASP.NET_Core.Data.Models
         public ICollection<Appointment> Appointments { get; init; }
 
         public ICollection<Address> Addresses { get; init; }
+
+        public ICollection<Review> Reviews { get; init; }
     }
 }

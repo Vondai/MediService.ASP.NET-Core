@@ -46,10 +46,16 @@
         public const string SubscriptionCountServicesNullErrorMessage = "Count of services field is required.";
 
         //Services
-
         public const int ServiceNameMinLength = 5;
         public const int ServiceNameMaxLength = 30;
 
         public const int ServiceDescriptionMinLength = 5;
+
+        //Reviews
+        public const int ReviewTitleMinLength = 5;
+        public const int ReviewTitleMaxLength = 20;
+
+        public const int ReviewDescriptionMinLength = 5;
+        public const int ReviewDescriptionMaxLength = 100;
     }
 }

@@ -1,23 +1,41 @@
-﻿using MediService.ASP.NET_Core.Data;
-using MediService.ASP.NET_Core.Models;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Diagnostics;
+using MediService.ASP.NET_Core.Data;
+using MediService.ASP.NET_Core.Models;
+using System.Linq;
+using MediService.ASP.NET_Core.Data.Enums;
+using MediService.ASP.NET_Core.Models.Reviews;
+using System;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly MediServiceDbContext data;
 
-        public HomeController(ILogger<HomeController> logger, MediServiceDbContext data)
+        public HomeController(MediServiceDbContext data)
         {
-            _logger = logger;
             this.data = data;
         }
 
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            var reviews = this.data.Reviews
+                .Where(r => r.Rating >= 5)
+                .Select(x => new ReviewViewModel()
+                {
+                    Title = x.Title,
+                    Description = x.Description,
+                    Rating = ((Rating)x.Rating).ToString(),
+                    Username = this.data.Users
+                    .Where(u => u.Id == x.UserId)
+                    .Select(u => u.UserName)
+                    .FirstOrDefault(),
+                })
+                .ToList();
+
+            return View(reviews);
+        }
 
         public IActionResult Faq() => View();
 

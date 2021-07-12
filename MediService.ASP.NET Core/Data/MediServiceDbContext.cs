@@ -24,6 +24,8 @@ namespace MediService.ASP.NET_Core.Data
 
         public DbSet<Specialist> Specialists { get; init; }
 
+        public DbSet<Review> Reviews { get; init; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +43,12 @@ namespace MediService.ASP.NET_Core.Data
                 .HasOne(u => u.Specialist)
                 .WithOne(x => x.User)
                 .HasForeignKey<Specialist>(x => x.UserId);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany(r => r.Reviews)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
 
