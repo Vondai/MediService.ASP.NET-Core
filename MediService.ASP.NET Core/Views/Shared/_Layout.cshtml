@@ -11,14 +11,14 @@
     <header>
         <div id="nav-bar" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom box-shadow">
             <h4 class="my-0 mr-md-auto font-weight-bolder">
-                <a href="/" class="navbar-expand">MediSevice</a>
+                <a href="/" class="navbar-expand text-primary">MediSevice</a>
             </h4>
             @if (User.Identity.IsAuthenticated)
             {
-                <span class="navbar-text">Welcome, @User.Identity.Name.</span>
+                <strong class="navbar-text font-weight-bolder text-primary">Welcome, @User.Identity.Name</strong>
             }
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark font-weight-bolder" href="/Team/All">The Team</a>
+            <a class="p-2 text-dark font-weight-bolder" href="/Specialists/All">The Team</a>
             <a class="p-2 text-dark font-weight-bolder" href="/Services/All">Services</a>
             <a class="p-2 text-dark font-weight-bolder" href="/Subscriptions/All">Subscriptions</a>
             <a class="p-2 text-dark font-weight-bolder" href="/Reviews/Create">Rate us</a>

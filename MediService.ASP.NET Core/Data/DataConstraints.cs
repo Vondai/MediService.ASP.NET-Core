@@ -57,5 +57,9 @@
 
         public const int ReviewDescriptionMinLength = 5;
         public const int ReviewDescriptionMaxLength = 100;
+
+        //Specialist
+        public const int SpecialistDescriptionMinLength = 10;
+        public const int SpecialistDescriptionMaxLength = 200;
     }
 }

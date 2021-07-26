@@ -2,11 +2,13 @@
 
 @{
     ViewData["Title"] = "Subscriptions";
+    var cheapestSub = Model[0].Price;
+    var numberOfServices = Model[0].CountServices;
 }
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Our Subscription Plans</h1>
-    <p class="lead">For only $9.99 you may choose two appointments with our medical specialists. Click <a href="#">services</a> to learn more or try it out now.</p>
+    <p class="lead">For only $@cheapestSub you may choose @numberOfServices appointments with our medical specialists. Click <a href="/Services/All">services</a> to learn more.</p>
 </div>
 
 <div class="container">

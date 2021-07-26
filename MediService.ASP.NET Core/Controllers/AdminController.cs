@@ -1,9 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Data.Models;
-using MediService.ASP.NET_Core.Models.Subscriptions;
 using MediService.ASP.NET_Core.Models.Services;
+using MediService.ASP.NET_Core.Models.Specialists;
+using MediService.ASP.NET_Core.Models.Subscriptions;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -64,5 +69,74 @@ namespace MediService.ASP.NET_Core.Controllers
 
             return Redirect("/Services/All");
         }
+
+        public IActionResult AddSpecialist() => View(new SpecialistAddFormModel()
+        {
+            Services = GetMediServices()
+        });
+
+        [HttpPost]
+        public async Task<IActionResult> AddSpecialist(SpecialistAddFormModel model, [FromForm] IFormFile specImage)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Services = GetMediServices();
+                return View(model);
+            }
+            var userId = this.data.Users
+                .Where(u => u.UserName == model.Username)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+            if (userId == null)
+            {
+                ModelState.AddModelError(nameof(model.Username), "Invalid username.");
+                model.Services = GetMediServices();
+                return View(model);
+            }
+            var mediService = this.data.Services
+                .Where(s => s.Id == model.ServiceId)
+                .FirstOrDefault();
+            if (mediService == null)
+            {
+                ModelState.AddModelError(nameof(model.ServiceId), "Invalid medical service.");
+                model.Services = GetMediServices();
+                return View(model);
+            }
+            string imageUrl = null;
+            if (specImage == null || specImage.Length == 0)
+            {
+                var defualtImg = "default";
+                imageUrl = $"/img/{defualtImg}.jpg";
+            }
+            else
+            {
+                var fileName = model.Username + "_img.jpg";
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\img", fileName);
+                using var fileStream = new FileStream(filePath, FileMode.Create);
+                await specImage.CopyToAsync(fileStream);
+                imageUrl = $"/img/{fileName}";
+            }
+            var specialist = new Specialist()
+            {
+                UserId = userId,
+                Description = model.Description,
+                ImageUrl = imageUrl,
+            };
+            specialist.Services.Add(mediService);
+            this.data.Specialists.Add(specialist);
+
+            await this.data.SaveChangesAsync();
+
+            return this.Redirect("/Specialists/All");
+        }
+
+        private IEnumerable<ServiceAddViewModel> GetMediServices()
+        => this.data.Services
+            .Select(x => new ServiceAddViewModel
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToList();
     }
 }

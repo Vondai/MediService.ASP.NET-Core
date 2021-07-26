@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static MediService.ASP.NET_Core.Data.DataConstraints;
+
 namespace MediService.ASP.NET_Core.Data.Models
 {
     public class Specialist
@@ -14,8 +16,10 @@ namespace MediService.ASP.NET_Core.Data.Models
         public string Id { get; init; }
 
         [Required]
+        [MaxLength(SpecialistDescriptionMaxLength)]
         public string Description { get; init; }
 
+        [Required]
         public string ImageUrl { get; init; }
 
         [Required]
