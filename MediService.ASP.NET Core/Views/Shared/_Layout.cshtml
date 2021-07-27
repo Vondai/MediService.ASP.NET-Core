@@ -16,14 +16,15 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <strong class="navbar-text font-weight-bolder text-primary">Welcome, @User.Identity.Name</strong>
+                <a class="p-2 text-dark font-weight-bolder" href="/Appointments/Make">Make appointment</a>
             }
-        <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark font-weight-bolder" href="/Specialists/All">The Team</a>
-            <a class="p-2 text-dark font-weight-bolder" href="/Services/All">Services</a>
-            <a class="p-2 text-dark font-weight-bolder" href="/Subscriptions/All">Subscriptions</a>
-            <a class="p-2 text-dark font-weight-bolder" href="/Reviews/Create">Rate us</a>
-            <a class="p-2 text-dark font-weight-bolder" href="/Home/Faq">F.A.Q</a>
-        </nav>
+            <nav class="my-2 my-md-2 mr-md-2">
+                <a class="p-2 text-dark font-weight-bolder" href="/Specialists/All">Specialists</a>
+                <a class="p-2 text-dark font-weight-bolder" href="/Services/All">Services</a>
+                <a class="p-2 text-dark font-weight-bolder" href="/Subscriptions/All">Subscriptions</a>
+                <a class="p-2 text-dark font-weight-bolder" href="/Reviews/Create">Rate us</a>
+                <a class="p-2 text-dark font-weight-bolder" href="/Home/Faq">F.A.Q</a>
+            </nav>
             @if (!User.Identity.IsAuthenticated)
             {
                 <a class="btn btn-outline-primary" href="/Users/Register">Register</a>

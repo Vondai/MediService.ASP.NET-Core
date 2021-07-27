@@ -1,11 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
-using MediService.ASP.NET_Core.Models;
-using System.Linq;
 using MediService.ASP.NET_Core.Data.Enums;
+using MediService.ASP.NET_Core.Models;
 using MediService.ASP.NET_Core.Models.Reviews;
-using System;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -21,7 +20,7 @@ namespace MediService.ASP.NET_Core.Controllers
         public IActionResult Index()
         {
             var reviews = this.data.Reviews
-                .Where(r => r.Rating >= 5)
+                .Where(r => (Rating)r.Rating >= Rating.Excellent)
                 .Select(x => new ReviewViewModel()
                 {
                     Title = x.Title,
@@ -32,6 +31,7 @@ namespace MediService.ASP.NET_Core.Controllers
                     .Select(u => u.UserName)
                     .FirstOrDefault(),
                 })
+                .Take(6)
                 .ToList();
 
             return View(reviews);
