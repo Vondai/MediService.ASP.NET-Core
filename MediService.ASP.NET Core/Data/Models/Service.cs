@@ -16,10 +16,10 @@ namespace MediService.ASP.NET_Core.Data.Models
 
         [Required]
         [MaxLength(ServiceNameMaxLength)]
-        public string Name { get; init; }
+        public string Name { get; set; }
 
         [Required]
-        public string Description { get; init; }
+        public string Description { get; set; }
 
         public ICollection<Specialist> Specialists { get; init; }
 

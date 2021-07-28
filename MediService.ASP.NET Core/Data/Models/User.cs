@@ -16,17 +16,17 @@ namespace MediService.ASP.NET_Core.Data.Models
         }
 
         [Required]
-        public string FullName { get; init; }
+        public string FullName { get; set; }
 
-        public bool IsSpecialist { get; init; }
+        public bool IsSpecialist { get; set; }
 
-        public string SpecialistId { get; init; }
+        public string SpecialistId { get; set; }
 
-        public Specialist Specialist { get; init; }
+        public Specialist Specialist { get; set; }
 
-        public int? SubscriptionId { get; init; }
+        public int? SubscriptionId { get; set; }
 
-        public Subscription Subscription { get; init; }
+        public Subscription Subscription { get; set; }
 
         public ICollection<Message> Messages { get; init; }
 

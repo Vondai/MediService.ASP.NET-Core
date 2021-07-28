@@ -7,17 +7,17 @@ namespace MediService.ASP.NET_Core.Data.Models
     {
         public int Id { get; init; }
 
-        public DateTime Time { get; init; }
+        public DateTime Time { get; set; }
 
-        public bool IsDone { get; init; }
+        public bool IsDone { get; set; }
 
         [Required]
-        public int ServiceId { get; init; }
+        public int ServiceId { get; set; }
 
         public Service Service { get; init; }
 
         [Required]
-        public string UserId { get; init; }
+        public string UserId { get; set; }
 
         public User User { get; init; }
     }

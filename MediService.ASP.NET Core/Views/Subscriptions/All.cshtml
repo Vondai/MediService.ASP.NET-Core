@@ -25,9 +25,17 @@
                         <li>Send messages to our Specialists</li>
                         <li>Number of available appointments: @subsciption.CountServices</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-primary">Subscribe now</button>
+                    <button type="button" class="btn btn-lg btn-block btn-primary" onclick="riderect()">Subscribe now</button>
                 </div>
             </div>
         }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function riderect() {
+            location.href = '/Subscriptions/Subscribe';
+        }
+    </script>
+} 

@@ -17,13 +17,13 @@ namespace MediService.ASP.NET_Core.Data.Models
 
         [Required]
         [MaxLength(SpecialistDescriptionMaxLength)]
-        public string Description { get; init; }
+        public string Description { get; set; }
 
         [Required]
-        public string ImageUrl { get; init; }
+        public string ImageUrl { get; set; }
 
         [Required]
-        public string UserId { get; init; }
+        public string UserId { get; set; }
 
         public User User { get; init; }
 

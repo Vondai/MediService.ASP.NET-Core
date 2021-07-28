@@ -20,7 +20,7 @@ namespace MediService.ASP.NET_Core.Controllers
         public IActionResult Index()
         {
             var reviews = this.data.Reviews
-                .Where(r => (Rating)r.Rating >= Rating.Excellent)
+                .OrderByDescending(x => x.Rating)
                 .Select(x => new ReviewViewModel()
                 {
                     Title = x.Title,
@@ -31,7 +31,7 @@ namespace MediService.ASP.NET_Core.Controllers
                     .Select(u => u.UserName)
                     .FirstOrDefault(),
                 })
-                .Take(6)
+                .Take(4)
                 .ToList();
 
             return View(reviews);

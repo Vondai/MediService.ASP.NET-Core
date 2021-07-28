@@ -1,0 +1,55 @@
+﻿@using System.Web
+
+@model SubscribeFormModel
+
+@{
+    ViewData["Title"] = "Subscribe";
+}
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">Subscribe</h2>
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="CreditCard"></label>
+                <input type="text" class="form-control" asp-for="CreditCard">
+                <span asp-validation-for="CreditCard"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cvc"></label>
+                <input type="text" class="form-control" asp-for="Cvc">
+                <span asp-validation-for="Cvc"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubscriptionId"></label>
+                <select id="subsciptionMenu" asp-for="SubscriptionId" class="form-control" onchange="calcPrice()">
+                    <option value="" selected disabled hidden>Choose a subscription plan</option>
+                    @foreach (var (key, subscription) in Model.Subscriptions)
+                    {
+                        <option value="@key">@subscription.Name - @subscription.CountService services</option>
+                    }
+                </select>
+                <span asp-validation-for="SubscriptionId"></span>
+            </div>
+            <div class="form-group">
+                <label for="totalPrice">Total Price:</label>
+                <input id="totalPrice" type="text" disabled value="" />
+            </div>
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calcPrice() {
+            let inputElement = document.getElementById("totalPrice");
+            let selectElementValue = document.getElementById("subsciptionMenu").value;
+            let subs = @Html.Raw(Json.Serialize(Model.Subscriptions));
+            let price = "Invalid";
+            if (subs[selectElementValue]) {
+                price = '$' + subs[selectElementValue].price;
+            }
+            inputElement.setAttribute("value", price);
+        }
+    </script>
+}

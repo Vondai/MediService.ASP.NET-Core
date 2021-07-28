@@ -12,15 +12,15 @@ namespace MediService.ASP.NET_Core.Data.Models
 
         public string Id { get; init; }
 
-        public string Content { get; init; }
+        public string Content { get; set; }
 
-        public DateTime Sent { get; init; }
+        public DateTime Sent { get; set; }
 
         [Required]
-        public string UserId { get; init; }
+        public string UserId { get; set; }
 
         public User User { get; init; }
 
-        public string Recipient { get; init; }
+        public string Recipient { get; set; }
     }
 }

@@ -15,12 +15,12 @@ namespace MediService.ASP.NET_Core.Data.Models
 
         [Required]
         [MaxLength(SubscriptionNameMaxLength)]
-        public string Name { get; init; }
+        public string Name { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Price { get; init; }
+        public decimal Price { get; set; }
 
-        public int CountService { get; init; }
+        public int CountService { get; set; }
 
         public ICollection<User> Users { get; init; }
     }

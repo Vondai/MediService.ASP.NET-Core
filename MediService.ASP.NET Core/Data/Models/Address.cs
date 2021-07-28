@@ -4,12 +4,12 @@
     {
         public int Id { get; init; }
 
-        public string FullAddress { get; init; }
+        public string FullAddress { get; set; }
 
-        public string City { get; init; }
+        public string City { get; set; }
 
-        public string UserId { get; init; }
+        public string UserId { get; set; }
 
-        public User User { get; init; }
+        public User User { get; set; }
     }
 }
