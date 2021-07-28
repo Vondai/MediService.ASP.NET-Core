@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Infrastructure;
+using MediService.ASP.NET_Core.Models.Appointments;
+using MediService.ASP.NET_Core.Models.Services;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -25,7 +28,16 @@ namespace MediService.ASP.NET_Core.Controllers
                 return Redirect("/Subscriptions/All");
             }
 
-            return View();
+            return View(new AppointmentFormModel() { Services = GetMediServices() });
         }
+
+        private IEnumerable<ServiceViewFormModel> GetMediServices()
+        => this.data.Services
+            .Select(x => new ServiceViewFormModel
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToList();
     }
 }

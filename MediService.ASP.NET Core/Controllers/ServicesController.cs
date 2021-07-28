@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
-using System.Linq;
 using MediService.ASP.NET_Core.Models.Services;
 
 namespace MediService.ASP.NET_Core.Controllers

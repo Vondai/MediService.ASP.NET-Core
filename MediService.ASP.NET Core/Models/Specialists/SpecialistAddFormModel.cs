@@ -21,6 +21,6 @@ namespace MediService.ASP.NET_Core.Models.Specialists
         [Display(Name = "Medical service")]
         public int ServiceId { get; init; }
 
-        public IEnumerable<ServiceAddViewModel> Services { get; set; }
+        public IEnumerable<ServiceViewFormModel> Services { get; set; }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Models.Subscriptions;
-using System.Collections.Generic;
 
 namespace MediService.ASP.NET_Core.Controllers
 {

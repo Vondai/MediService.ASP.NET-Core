@@ -130,9 +130,9 @@ namespace MediService.ASP.NET_Core.Controllers
             return this.Redirect("/Specialists/All");
         }
 
-        private IEnumerable<ServiceAddViewModel> GetMediServices()
+        private IEnumerable<ServiceViewFormModel> GetMediServices()
         => this.data.Services
-            .Select(x => new ServiceAddViewModel
+            .Select(x => new ServiceViewFormModel
             {
                 Id = x.Id,
                 Name = x.Name
