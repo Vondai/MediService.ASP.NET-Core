@@ -17,12 +17,6 @@ namespace MediService.ASP.NET_Core.Data.Models
         [Required]
         public string FullName { get; set; }
 
-        public bool IsSpecialist { get; set; }
-
-        public string SpecialistId { get; set; }
-
-        public Specialist Specialist { get; set; }
-
         public int? SubscriptionId { get; set; }
 
         public Subscription Subscription { get; set; }

@@ -4,14 +4,16 @@ using MediService.ASP.NET_Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MediService.ASP.NET_Core.Data.Migrations
 {
     [DbContext(typeof(MediServiceDbContext))]
-    partial class MediServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210728202233_DeletedUnnecessaryColumnInUser")]
+    partial class DeletedUnnecessaryColumnInUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,22 +51,11 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdditionalInfo")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsCanceled")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDone")
                         .HasColumnType("bit");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
-
-                    b.Property<string>("SpecialistId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
@@ -76,8 +67,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ServiceId");
-
-                    b.HasIndex("SpecialistId");
 
                     b.HasIndex("UserId");
 
@@ -447,12 +436,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MediService.ASP.NET_Core.Data.Models.Specialist", "Specialist")
-                        .WithMany("Appointments")
-                        .HasForeignKey("SpecialistId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MediService.ASP.NET_Core.Data.Models.User", "User")
                         .WithMany("Appointments")
                         .HasForeignKey("UserId")
@@ -460,8 +443,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Service");
-
-                    b.Navigation("Specialist");
 
                     b.Navigation("User");
                 });
@@ -575,11 +556,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                 });
 
             modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Service", b =>
-                {
-                    b.Navigation("Appointments");
-                });
-
-            modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Specialist", b =>
                 {
                     b.Navigation("Appointments");
                 });

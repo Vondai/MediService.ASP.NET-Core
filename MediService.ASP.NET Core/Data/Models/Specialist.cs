@@ -12,6 +12,7 @@ namespace MediService.ASP.NET_Core.Data.Models
         {
             this.Id = Guid.NewGuid().ToString();
             this.Services = new HashSet<Service>();
+            this.Appointments = new HashSet<Appointment>();
         }
         public string Id { get; init; }
 
@@ -28,5 +29,7 @@ namespace MediService.ASP.NET_Core.Data.Models
         public User User { get; init; }
 
         public ICollection<Service> Services { get; init; }
+
+        public ICollection<Appointment> Appointments { get; init; }
     }
 }

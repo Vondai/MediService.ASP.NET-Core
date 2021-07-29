@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+using static MediService.ASP.NET_Core.Data.DataConstraints;
+
 namespace MediService.ASP.NET_Core.Data.Models
 {
     public class Appointment
@@ -11,6 +13,11 @@ namespace MediService.ASP.NET_Core.Data.Models
 
         public bool IsDone { get; set; }
 
+        public bool IsCanceled { get; set; }
+
+        [MaxLength(AppointmentInfoMaxLength)]
+        public string AdditionalInfo { get; set; }
+
         [Required]
         public int ServiceId { get; set; }
 
@@ -20,5 +27,12 @@ namespace MediService.ASP.NET_Core.Data.Models
         public string UserId { get; set; }
 
         public User User { get; init; }
+
+        [Required]
+        public string SpecialistId { get; set; }
+
+        public Specialist Specialist { get; set; }
+
+
     }
 }

@@ -35,19 +35,26 @@ namespace MediService.ASP.NET_Core.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
+                .HasOne(x => x.Specialist)
+                .WithMany(x => x.Appointments)
+                .HasForeignKey(x => x.SpecialistId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Appointment>()
             .HasOne(a => a.Service)
             .WithMany(a => a.Appointments)
             .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Specialist)
-                .WithOne(x => x.User)
-                .HasForeignKey<Specialist>(x => x.UserId);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
                 .WithMany(r => r.Reviews)
                 .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Specialist>()
+                .HasOne(x => x.User)
+                .WithOne()
+                .HasForeignKey<Specialist>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);

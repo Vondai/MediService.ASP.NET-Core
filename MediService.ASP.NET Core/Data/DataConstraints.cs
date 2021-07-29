@@ -61,5 +61,8 @@
         //Specialist
         public const int SpecialistDescriptionMinLength = 10;
         public const int SpecialistDescriptionMaxLength = 200;
+
+        //Appointment
+        public const int AppointmentInfoMaxLength = 200;
     }
 }
