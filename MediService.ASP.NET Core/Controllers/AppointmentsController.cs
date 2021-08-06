@@ -7,16 +7,21 @@ using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Models.Appointments;
 using MediService.ASP.NET_Core.Models.Services;
 using MediService.ASP.NET_Core.Data.Models;
+using MediService.ASP.NET_Core.Services.Specialists;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class AppointmentsController : Controller
     {
         private readonly MediServiceDbContext data;
+        private readonly ISpecialistService specialists;
 
-        public AppointmentsController(MediServiceDbContext data)
+        public AppointmentsController
+            (MediServiceDbContext data,
+            ISpecialistService specialists)
         {
             this.data = data;
+            this.specialists = specialists;
         }
 
         public IActionResult Make()
@@ -77,7 +82,7 @@ namespace MediService.ASP.NET_Core.Controllers
                     Services = GetMediServices(),
                 });
             }
-            if (time.ToUniversalTime().Day < DateTime.UtcNow.Day 
+            if (time.ToUniversalTime().Day < DateTime.UtcNow.Day
                 && time.ToUniversalTime() > DateTime.UtcNow.AddDays(30))
             {
                 ModelState.AddModelError(nameof(model.Time), "Invalid date.");
@@ -111,33 +116,25 @@ namespace MediService.ASP.NET_Core.Controllers
         public IActionResult Mine()
         {
             var userId = this.User.Id();
-            var isSpecialist = this.data
-                .Specialists.Any(x => x.UserId == userId);
-            var appointmentsQuery = this.data
-                .Appointments.AsQueryable();
-            if (isSpecialist)
-            {
-                var specialistId = this.data.Specialists
-                    .Where(x => x.UserId == userId)
-                    .Select(x => x.Id)
-                    .FirstOrDefault();
-                appointmentsQuery = appointmentsQuery.Where(x => x.SpecialistId == specialistId);
-            }
-            else
-            {
-                appointmentsQuery = appointmentsQuery.Where(x => x.UserId == userId);
-            }
-            var appointments = appointmentsQuery
+            var specialistId = this.specialists.IdByUser(userId);
+
+            var appointments = this.data
+                .Appointments
+                .Where(x => specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
                 .OrderBy(a => a.Time)
                 .Select(x => new AppointmentViewModel()
                 {
+                    Id = x.Id,
                     IsCanceled = x.IsCanceled ? "Yes" : "No",
                     IsDone = x.IsDone ? "Yes" : "No",
                     Time = x.Time.ToLocalTime().ToString("dd-MM-yyyy HH:MM"),
                     ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
-                    SpecialistName = this.data.Specialists.Where(s => s.Id == x.SpecialistId).Select(s => s.User.FullName).FirstOrDefault()
+                    Name = specialistId != null ?
+                                x.User.FullName :
+                                x.Specialist.User.FullName
                 })
                 .ToList();
+
             return View(appointments);
         }
 

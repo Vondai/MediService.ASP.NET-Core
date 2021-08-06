@@ -16,6 +16,7 @@ namespace MediService.ASP.NET_Core.Data
         public DbSet<Address> Addresses { get; init; }
 
         public DbSet<Appointment> Appointments { get; init; }
+
         public DbSet<Message> Messages { get; init; }
 
         public DbSet<Service> Services { get; init; }

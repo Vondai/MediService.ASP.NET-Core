@@ -4,14 +4,16 @@ using MediService.ASP.NET_Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MediService.ASP.NET_Core.Data.Migrations
 {
     [DbContext(typeof(MediServiceDbContext))]
-    partial class MediServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210806111841_RemovedIdAppointments")]
+    partial class RemovedIdAppointments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,9 +46,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
 
             modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Appointment", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("AdditionalInfo")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -70,8 +69,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
 
                     b.HasIndex("ServiceId");
 
@@ -440,21 +437,21 @@ namespace MediService.ASP.NET_Core.Data.Migrations
             modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Appointment", b =>
                 {
                     b.HasOne("MediService.ASP.NET_Core.Data.Models.Service", "Service")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MediService.ASP.NET_Core.Data.Models.Specialist", "Specialist")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("SpecialistId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MediService.ASP.NET_Core.Data.Models.User", "User")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Service");
@@ -572,16 +569,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Service", b =>
-                {
-                    b.Navigation("Appointments");
-                });
-
-            modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Specialist", b =>
-                {
-                    b.Navigation("Appointments");
-                });
-
             modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.Subscription", b =>
                 {
                     b.Navigation("Users");
@@ -590,8 +577,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
             modelBuilder.Entity("MediService.ASP.NET_Core.Data.Models.User", b =>
                 {
                     b.Navigation("Addresses");
-
-                    b.Navigation("Appointments");
 
                     b.Navigation("Messages");
 

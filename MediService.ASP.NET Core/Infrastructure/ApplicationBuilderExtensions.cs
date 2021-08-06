@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Data.Models;
-using System;
 
 namespace MediService.ASP.NET_Core.Infrastructure
 {

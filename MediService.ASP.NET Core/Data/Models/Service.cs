@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 using static MediService.ASP.NET_Core.Data.DataConstraints;
 
 namespace MediService.ASP.NET_Core.Data.Models

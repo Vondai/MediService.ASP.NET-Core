@@ -1,6 +1,12 @@
-﻿@model IEnumerable<AppointmentViewModel>
+﻿@using MediService.ASP.NET_Core.Services.Specialists
+@using MediService.ASP.NET_Core.Infrastructure
+
+@model IEnumerable<AppointmentViewModel>
+
+@inject ISpecialistService Specialists
 @{
     ViewData["Title"] = "My appointments";
+    var isSpecialist = Specialists.IsSpecialist(User.Id());
 }
 
 <div class="container">
@@ -18,7 +24,14 @@
                     <th scope="col">Is it done</th>
                     <th scope="col">Is it canceled</th>
                     <th scope="col">Service</th>
-                    <th scope="col">Specialist name</th>
+                    @if (isSpecialist)
+                    {
+                        <th scope="col">Patient name</th>
+                    }
+                    else
+                    {
+                        <th scope="col">Specialist name</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +42,8 @@
                         <td>@appointment.IsDone</td>
                         <td>@appointment.IsCanceled</td>
                         <td>@appointment.ServiceName</td>
-                        <td>@appointment.SpecialistName</td>
+                        <td>@appointment.Name</td>
+                        <td><a href="/Appointments/Details?@appointment.Id">View more</a></td>
                     </tr>
                 }
             </tbody>

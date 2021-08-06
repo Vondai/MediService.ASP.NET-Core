@@ -12,6 +12,12 @@
 <div class="container">
     <h2>Most recent reviews</h2>
     <div class="card-deck row">
+        @if (!Model.Any())
+        {
+            <div class="container">
+                <h3>No reviews yet.</h3>
+            </div>
+        }
         @foreach (var review in Model)
         {
             <div class="col-sm-6">

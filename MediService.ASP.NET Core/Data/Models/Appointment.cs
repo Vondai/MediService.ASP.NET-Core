@@ -7,7 +7,11 @@ namespace MediService.ASP.NET_Core.Data.Models
 {
     public class Appointment
     {
-        public int Id { get; init; }
+        public Appointment()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+        public string Id { get; set; }
 
         public DateTime Time { get; set; }
 
@@ -32,7 +36,6 @@ namespace MediService.ASP.NET_Core.Data.Models
         public string SpecialistId { get; set; }
 
         public Specialist Specialist { get; set; }
-
 
     }
 }

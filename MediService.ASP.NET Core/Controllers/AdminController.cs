@@ -112,7 +112,7 @@ namespace MediService.ASP.NET_Core.Controllers
             {
                 var fileName = model.Username + "_img.jpg";
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\img", fileName);
-                using var fileStream = new FileStream(filePath, FileMode.Create);
+                using var fileStream = new FileStream(filePath, FileMode.OpenOrCreate);
                 await specImage.CopyToAsync(fileStream);
                 imageUrl = $"/img/{fileName}";
             }

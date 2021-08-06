@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Infrastructure;
+using MediService.ASP.NET_Core.Services.Specialists;
 
 namespace MediService.ASP.NET_Core
 {
@@ -41,6 +42,7 @@ namespace MediService.ASP.NET_Core
 
                 options.Lockout.AllowedForNewUsers = false;
             });
+            services.AddTransient<ISpecialistService, SpecialistService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
