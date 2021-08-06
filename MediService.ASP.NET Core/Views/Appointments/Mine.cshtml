@@ -5,29 +5,35 @@
 
 <div class="container">
     <h2 class="heading-margin text-center">My appointments</h2>
-
-    <table class="table table-info">
-        <thead>
-            <tr>
-                <th scope="col">Time</th>
-                <th scope="col">Is it done</th>
-                <th scope="col">Is it canceled</th>
-                <th scope="col">Service</th>
-                <th scope="col">Specialist name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var appointment in Model)
-            {
+    @if (!Model.Any())
+    {
+        <h3 class="text-center">You do not have any appointments.</h3>
+    }
+    else
+    {
+        <table class="table table-info">
+            <thead>
                 <tr>
-                    <td>@appointment.Time</td>
-                    <td>@appointment.IsDone</td>
-                    <td>@appointment.IsCanceled</td>
-                    <td>@appointment.ServiceName</td>
-                    <td>@appointment.SpecialistName</td>
+                    <th scope="col">Time</th>
+                    <th scope="col">Is it done</th>
+                    <th scope="col">Is it canceled</th>
+                    <th scope="col">Service</th>
+                    <th scope="col">Specialist name</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model)
+                {
+                    <tr>
+                        <td>@appointment.Time</td>
+                        <td>@appointment.IsDone</td>
+                        <td>@appointment.IsCanceled</td>
+                        <td>@appointment.ServiceName</td>
+                        <td>@appointment.SpecialistName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
 

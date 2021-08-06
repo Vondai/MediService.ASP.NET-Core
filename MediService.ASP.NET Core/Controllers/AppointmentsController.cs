@@ -77,16 +77,8 @@ namespace MediService.ASP.NET_Core.Controllers
                     Services = GetMediServices(),
                 });
             }
-            if (time.ToUniversalTime().Day < DateTime.UtcNow.Day)
-            {
-                ModelState.AddModelError(nameof(model.Time), "Invalid date.");
-                return View(new AppointmentFormModel()
-                {
-                    Address = GetUserAddress(),
-                    Services = GetMediServices(),
-                });
-            }
-            if (time.ToUniversalTime() > DateTime.UtcNow.AddDays(30))
+            if (time.ToUniversalTime().Day < DateTime.UtcNow.Day 
+                && time.ToUniversalTime() > DateTime.UtcNow.AddDays(30))
             {
                 ModelState.AddModelError(nameof(model.Time), "Invalid date.");
                 return View(new AppointmentFormModel()
@@ -118,9 +110,24 @@ namespace MediService.ASP.NET_Core.Controllers
 
         public IActionResult Mine()
         {
-            var appointments = this.data
-                .Appointments
-                .Where(a => a.UserId == this.User.Id())
+            var userId = this.User.Id();
+            var isSpecialist = this.data
+                .Specialists.Any(x => x.UserId == userId);
+            var appointmentsQuery = this.data
+                .Appointments.AsQueryable();
+            if (isSpecialist)
+            {
+                var specialistId = this.data.Specialists
+                    .Where(x => x.UserId == userId)
+                    .Select(x => x.Id)
+                    .FirstOrDefault();
+                appointmentsQuery = appointmentsQuery.Where(x => x.SpecialistId == specialistId);
+            }
+            else
+            {
+                appointmentsQuery = appointmentsQuery.Where(x => x.UserId == userId);
+            }
+            var appointments = appointmentsQuery
                 .OrderBy(a => a.Time)
                 .Select(x => new AppointmentViewModel()
                 {
