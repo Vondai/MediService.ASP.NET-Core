@@ -42,6 +42,7 @@ namespace MediService.ASP.NET_Core
 
                 options.Lockout.AllowedForNewUsers = false;
             });
+            services.AddMemoryCache();
             services.AddTransient<ISpecialistService, SpecialistService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
