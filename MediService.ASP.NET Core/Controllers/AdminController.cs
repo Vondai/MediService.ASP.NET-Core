@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
@@ -10,8 +11,11 @@ using MediService.ASP.NET_Core.Models.Services;
 using MediService.ASP.NET_Core.Models.Specialists;
 using MediService.ASP.NET_Core.Models.Subscriptions;
 
+using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
+
 namespace MediService.ASP.NET_Core.Controllers
 {
+    [Authorize(Roles = AdminRoleName)]
     public class AdminController : Controller
     {
         private readonly MediServiceDbContext data;

@@ -18,6 +18,7 @@ namespace MediService.ASP.NET_Core.Controllers
         {
             var specialists = this.data
                 .Specialists
+                .OrderBy(s => s.User.FullName)
                 .Select(s => new SpecialistViewModel
                 {
                     FullName = s.User.FullName,
