@@ -25,7 +25,7 @@
                     <option value="" selected disabled hidden>Choose a subscription plan</option>
                     @foreach (var (key, subscription) in Model.Subscriptions)
                     {
-                        <option value="@key">@subscription.Name - @subscription.CountService services</option>
+                        <option value="@key">@subscription.Name - @subscription.AppointmentCount appointments</option>
                     }
                 </select>
                 <span asp-validation-for="SubscriptionId"></span>

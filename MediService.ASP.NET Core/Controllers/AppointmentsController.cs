@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Infrastructure;
@@ -11,6 +12,7 @@ using MediService.ASP.NET_Core.Services.Specialists;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
+    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly MediServiceDbContext data;
@@ -30,15 +32,39 @@ namespace MediService.ASP.NET_Core.Controllers
             var isSubscriber = this.data
                 .Users
                 .Any(u => u.Id == userId && u.SubscriptionId.HasValue);
+            var isSpecialist = specialists.IsSpecialist(userId);
+            if (isSpecialist)
+            {
+                this.TempData.Add("Error", "Only non-specialists can make appointments.");
+                return Redirect("/Home");
+            }
             if (!isSubscriber)
             {
+                this.TempData.Add("Error", "Only subscribers can make appointments.");
                 return Redirect("/Subscriptions/All");
+            }
+            var appointmentCount = this.data
+                .Appointments
+                .Where(a => a.UserId == userId
+                    && a.IsCanceled == false
+                    && a.IsDone == false)
+                .Count();
+            var subscriptionAppointmentCount = this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(x => x.Subscription.AppointmentCount)
+                .FirstOrDefault();
+            if (appointmentCount == subscriptionAppointmentCount)
+            {
+                this.TempData.Add("Error", "You have reached the maximum number of appointments for the current subscription plan.");
+                return Redirect("/Appointments/Mine");
             }
 
             return View(new AppointmentFormModel()
             {
                 Address = GetUserAddress(),
                 Services = GetMediServices(),
+                AppointmentsLeft = AppointmentsLeft()
             });
         }
 
@@ -104,13 +130,14 @@ namespace MediService.ASP.NET_Core.Controllers
                 IsDone = false,
                 ServiceId = model.ServiceId,
                 SpecialistId = specialistId,
-                Time = time.ToUniversalTime(),
+                Date = time.ToUniversalTime(),
                 UserId = this.User.Id(),
             };
             this.data.Appointments.Add(appointment);
             this.data.SaveChanges();
 
-            return Redirect("/Home");
+            TempData.Add("Success", "Successful appointment.");
+            return Redirect("/Appointments/Mine");
         }
 
         public IActionResult Mine()
@@ -123,12 +150,12 @@ namespace MediService.ASP.NET_Core.Controllers
                 .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
                        && x.IsDone == false
                        && x.IsCanceled == false)
-                .OrderBy(a => a.Time)
+                .OrderBy(a => a.Date)
                 .Select(x => new AppointmentViewModel()
                 {
                     Id = x.Id,
-                    Date = x.Time.ToLocalTime().ToString("dd-MM-yyyy"),
-                    Time = x.Time.ToLocalTime().ToString("HH:mm"),
+                    Date = x.Date.ToLocalTime().ToString("dd-MM-yyyy"),
+                    Time = x.Date.ToLocalTime().ToString("HH:mm"),
                     ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
                     Name = specialistId != null ?
                                 x.User.FullName :
@@ -152,7 +179,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 .Select(x => new AppointmentDetailsViewModel()
                 {
                     Id = x.Id,
-                    Date = x.Time.ToLocalTime().ToString("dd-MM-yyyy HH:MM"),
+                    Date = x.Date.ToLocalTime().ToString("dd-MM-yyyy HH:MM"),
                     AdditionalInfo = x.AdditionalInfo,
                     Address = x.User.Addresses
                     .Select(address => address.FullAddress)
@@ -162,6 +189,8 @@ namespace MediService.ASP.NET_Core.Controllers
                     .FirstOrDefault(),
                     PatientName = x.User.FullName,
                     Service = x.Service.Name,
+                    Email = x.User.Email,
+                    PhoneNumber = x.User.PhoneNumber
                 })
                 .FirstOrDefault();
             if (appointment == null)
@@ -220,15 +249,35 @@ namespace MediService.ASP.NET_Core.Controllers
                 .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
                        && (x.IsDone == true
                        || x.IsCanceled == true))
+                .OrderBy(x => x.Date)
                 .Select(x => new AppointmentPastViewModel()
                 {
-                    Date = x.Time.ToLocalTime().ToString("dd-MM-yyyy"),
+                    Date = x.Date.ToLocalTime().ToString("dd-MM-yyyy"),
                     ServiceName = x.Service.Name,
                     Status = x.IsDone ? "Finished" : "Canceled"
                 })
                 .ToList();
 
             return View(pastAppointments);
+        }
+
+        private int AppointmentsLeft()
+        {
+            var user = this.data
+                .Users
+                .FirstOrDefault(u => u.Id == User.Id());
+            var appointmentCount = this.data
+                .Subscriptions
+                .Where(s => s.Users.Contains(user))
+                .Select(x => x.AppointmentCount)
+                .FirstOrDefault();
+            var currAppointmentCount = this.data
+                .Appointments
+                .Where(a => a.User == user
+                    && a.IsCanceled == false
+                    && a.IsDone == false)
+                .Count();
+            return appointmentCount - currAppointmentCount;
         }
 
         private IEnumerable<ServiceViewFormModel> GetMediServices()

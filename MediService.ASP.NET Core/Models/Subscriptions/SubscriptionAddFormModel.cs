@@ -15,8 +15,8 @@ namespace MediService.ASP.NET_Core.Models.Subscriptions
         [Required]
         public string Price { get; init; }
 
-        [Required(ErrorMessage = SubscriptionCountServicesNullErrorMessage)]
-        [Display(Name = "Count or services per user")]
-        public int CountServices { get; init; }
+        [Required(ErrorMessage = SubscriptionCountAppointmentNullErrorMessage)]
+        [Display(Name = "Count of appointments per user")]
+        public int AppointmentCount { get; init; }
     }
 }

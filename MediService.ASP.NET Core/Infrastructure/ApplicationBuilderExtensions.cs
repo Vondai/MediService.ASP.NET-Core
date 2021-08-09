@@ -160,9 +160,9 @@ namespace MediService.ASP.NET_Core.Infrastructure
             data.Subscriptions
                 .AddRange(new[]
                 {
-                    new Subscription {Name = "Basic", Price = 39.99M, CountService = 2},
-                    new Subscription {Name = "Standard", Price = 49.99M, CountService = 3},
-                    new Subscription {Name = "Premium", Price = 59.99M, CountService = 5},
+                    new Subscription {Name = "Basic", Price = 39.99M, AppointmentCount = 2},
+                    new Subscription {Name = "Standard", Price = 49.99M, AppointmentCount = 3},
+                    new Subscription {Name = "Premium", Price = 59.99M, AppointmentCount = 5},
                 });
             data.SaveChanges();
         }

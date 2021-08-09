@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using MediService.ASP.NET_Core.Data;
@@ -21,6 +22,7 @@ namespace MediService.ASP.NET_Core.Controllers
             this.cache = cache;
         }
 
+        [AllowAnonymous]
         public IActionResult All()
         {
             var specialists = this.cache.Get<List<SpecialistViewModel>>(AllSpecialistsCacheKey);

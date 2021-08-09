@@ -6,7 +6,7 @@
 
         public string Name { get; init; }
 
-        public int CountService { get; init; }
+        public int AppointmentCount { get; init; }
 
         public string Price { get; init; }
     }

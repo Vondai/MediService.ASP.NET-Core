@@ -17,6 +17,8 @@ namespace MediService.ASP.NET_Core.Models.Appointments
         [Display(Name = "Medical service")]
         public int ServiceId { get; init; }
 
+        public int AppointmentsLeft { get; set; }
+
         public IEnumerable<ServiceViewFormModel> Services { get; set; }
     }
 }

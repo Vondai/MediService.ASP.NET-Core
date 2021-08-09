@@ -4,14 +4,16 @@ using MediService.ASP.NET_Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MediService.ASP.NET_Core.Data.Migrations
 {
     [DbContext(typeof(MediServiceDbContext))]
-    partial class MediServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210809142517_RenamedColumnInSubscription")]
+    partial class RenamedColumnInSubscription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,9 +53,6 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
 
@@ -66,6 +65,9 @@ namespace MediService.ASP.NET_Core.Data.Migrations
                     b.Property<string>("SpecialistId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

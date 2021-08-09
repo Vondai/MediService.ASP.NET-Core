@@ -14,5 +14,9 @@
         public string AdditionalInfo { get; init; }
 
         public string Service { get; init; }
+
+        public string PhoneNumber { get; init; }
+
+        public string Email { get; init; }
     }
 }

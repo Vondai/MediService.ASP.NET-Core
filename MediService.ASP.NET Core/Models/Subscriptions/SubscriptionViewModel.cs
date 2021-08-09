@@ -6,6 +6,6 @@
 
         public string Price { get; init; }
 
-        public string CountServices { get; init; }
+        public string AppointmentCount { get; init; }
     }
 }

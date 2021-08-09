@@ -1,5 +1,5 @@
 ﻿@model SubscriptionAddFormModel
-@{ 
+@{
     ViewData["Title"] = "Add Subscription";
 }
 <div class="row">
@@ -17,9 +17,9 @@
                 <span asp-validation-for="Price"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CountServices"></label>
-                <input type="number" class="form-control" value="1" asp-for="CountServices">
-                <span asp-validation-for="CountServices"></span>
+                <label asp-for="AppointmentCount"></label>
+                <input type="number" class="form-control" value="1" asp-for="AppointmentCount">
+                <span asp-validation-for="AppointmentCount"></span>
             </div>
             <button type="submit" class="btn btn-primary">Add Subscription</button>
         </form>

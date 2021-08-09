@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Infrastructure;
@@ -16,6 +17,7 @@ namespace MediService.ASP.NET_Core.Controllers
             this.data = data;
         }
 
+        [AllowAnonymous]
         public IActionResult All()
         {
             var subscriptions = this.data.Subscriptions
@@ -24,24 +26,26 @@ namespace MediService.ASP.NET_Core.Controllers
                 {
                     Name = s.Name,
                     Price = s.Price.ToString(),
-                    CountServices = s.CountService.ToString(),
+                    AppointmentCount = s.AppointmentCount.ToString(),
                 })
                 .ToList();
 
             return View(subscriptions);
         }
 
+        [Authorize]
         public IActionResult Subscribe()
         {
             var userId = this.User.Id();
-            var isSubscriber = this.data
-                .Users
-                .Any(u => u.Id == userId && u.SubscriptionId.HasValue);
-            if (isSubscriber)
+            var activeAppointments = this.data
+                .Appointments
+                .Where(a => a.User.Id == userId && a.IsCanceled == false && a.IsDone == false)
+                .Count();
+            if (activeAppointments > 0)
             {
-                return Redirect("/Appointments/Make");
+                TempData.Add("Error", "You have active appointments.");
+                return Redirect("/Appointments/Mine");
             }
-
             return View(new SubscribeFormModel()
             {
                 Subscriptions = GetSubscriptions()
@@ -49,6 +53,7 @@ namespace MediService.ASP.NET_Core.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Subscribe(SubscribeFormModel model)
         {
             if (!ModelState.IsValid)
@@ -66,8 +71,17 @@ namespace MediService.ASP.NET_Core.Controllers
             }
             var user = this.data
                 .Users.FirstOrDefault(x => x.Id == this.User.Id());
+            var currentSubscription = this.data
+                .Subscriptions
+                .Where(x => x.Users.Contains(user))
+                .FirstOrDefault();
+            if (currentSubscription != null)
+            {
+                currentSubscription.Users.Remove(user);
+            }
             subscription.Users.Add(user);
             this.data.SaveChanges();
+            TempData.Add("Success", "Successful subscription.");
             return Redirect("/Appointments/Make");
         }
 
@@ -78,7 +92,7 @@ namespace MediService.ASP.NET_Core.Controllers
             .Select(x => new SubscriptionFormModel()
             {
                 Id = x.Id,
-                CountService = x.CountService,
+                AppointmentCount = x.AppointmentCount,
                 Name = x.Name,
                 Price = x.Price.ToString(),
             })

@@ -20,7 +20,7 @@ namespace MediService.ASP.NET_Core.Data.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
 
-        public int CountService { get; set; }
+        public int AppointmentCount { get; set; }
 
         public ICollection<User> Users { get; init; }
     }

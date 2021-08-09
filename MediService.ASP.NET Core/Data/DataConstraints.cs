@@ -43,7 +43,7 @@
         public const int SubsciptionNameMinLength = 5;
         public const int SubscriptionNameMaxLength = 15;
 
-        public const string SubscriptionCountServicesNullErrorMessage = "Count of services field is required.";
+        public const string SubscriptionCountAppointmentNullErrorMessage = "Count of appointments field is required.";
 
         //Services
         public const int ServiceNameMinLength = 5;

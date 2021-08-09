@@ -46,7 +46,7 @@ namespace MediService.ASP.NET_Core.Controllers
             {
                 Name = model.Name,
                 Price = price,
-                CountService = model.CountServices,
+                AppointmentCount = model.AppointmentCount,
             };
             this.data.Subscriptions.Add(subscription);
             await this.data.SaveChangesAsync();

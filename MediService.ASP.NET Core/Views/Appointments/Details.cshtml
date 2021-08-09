@@ -25,13 +25,21 @@
                 <dd>@Model.City</dd>
             </dl>
             <dl class="param text-center">
+                <dt>Email</dt>
+                <dd>@Model.Email</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt>Phone number</dt>
+                <dd>@Model.PhoneNumber</dd>
+            </dl>
+            <dl class="param text-center">
                 <dt>Service</dt>
                 <dd>@Model.Service</dd>
             </dl>
             <dl class="item-property text-center">
                 <dt>Additional information</dt>
                 <dd>
-                    @if (Model.AdditionalInfo.Length > 0)
+                    @if (Model.AdditionalInfo != null && Model.AdditionalInfo.Length > 0)
                     {
                         <p>
                             @Model.AdditionalInfo

@@ -13,7 +13,7 @@ namespace MediService.ASP.NET_Core.Data.Models
         }
         public string Id { get; set; }
 
-        public DateTime Time { get; set; }
+        public DateTime Date { get; set; }
 
         public bool IsDone { get; set; }
 

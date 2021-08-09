@@ -26,7 +26,7 @@ namespace MediService.ASP.NET_Core
             services.AddControllersWithViews();
 
             //Register dbContext
-            services.AddDbContext<MediServiceDbContext>(o => 
+            services.AddDbContext<MediServiceDbContext>(o =>
                 o.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             //Register Identity Service

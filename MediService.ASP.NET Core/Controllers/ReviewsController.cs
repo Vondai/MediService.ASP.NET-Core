@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Models.Reviews;
 using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Data.Enums;
+using MediService.ASP.NET_Core.Infrastructure;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -19,10 +19,17 @@ namespace MediService.ASP.NET_Core.Controllers
             this.data = data;
         }
 
-        [Authorize]
-        public IActionResult Create() => View(new CreateReviewFormModel());
+        public IActionResult Create() 
+        {
+            var userId = this.User.Id();
+            if (userId == null)
+            {
+                TempData.Add("Error", "Please register first.");
+                return Redirect("/Account/Register");
+            }
+            return View(new CreateReviewFormModel());
+        }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateReviewFormModel model)
         {

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Models.Services;
@@ -6,7 +8,6 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 
 using static MediService.ASP.NET_Core.WebConstants.Cache;
-using System;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -19,7 +20,7 @@ namespace MediService.ASP.NET_Core.Controllers
             this.data = data;
             this.cache = cache;
         }
-
+        [AllowAnonymous]
         public IActionResult All()
         {
             var services = this.cache.Get<List<ServiceViewModel>>(AllServicesCacheKey);

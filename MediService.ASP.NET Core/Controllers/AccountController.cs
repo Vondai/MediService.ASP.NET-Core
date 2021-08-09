@@ -7,17 +7,17 @@ using MediService.ASP.NET_Core.Models.Users;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
-    public class UsersController : Controller
+    public class AccountController : Controller
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
 
-        public UsersController(UserManager<User> userManager, SignInManager<User> signInManager = null)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager = null)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
-
+        [AllowAnonymous]
         public IActionResult Register() => View();
 
         [HttpPost]
@@ -60,7 +60,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 return View(model);
             }
 
-            return Redirect("/Users/Login");
+            return Redirect("/Account/Login");
         }
 
         [AllowAnonymous]
@@ -89,6 +89,11 @@ namespace MediService.ASP.NET_Core.Controllers
         {
             await signInManager.SignOutAsync();
             return Redirect("/Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return Unauthorized();
         }
     }
 }
