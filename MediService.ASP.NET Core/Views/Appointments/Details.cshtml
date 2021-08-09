@@ -1,0 +1,53 @@
+﻿@model AppointmentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container">
+    <div class="card col-sm-12 offset-lg-2 col-lg-8 bg-warning">
+        <article class="card-body p-5">
+            <h2 class="text-center">Appointment Details</h2>
+            <dl class="param text-center">
+                <dt>Date</dt>
+                <dd>@Model.Date</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt>Patient Name</dt>
+                <dd>@Model.PatientName</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt>Full Address</dt>
+                <dd>@Model.Address</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt>City</dt>
+                <dd>@Model.City</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt>Service</dt>
+                <dd>@Model.Service</dd>
+            </dl>
+            <dl class="item-property text-center">
+                <dt>Additional information</dt>
+                <dd>
+                    @if (Model.AdditionalInfo.Length > 0)
+                    {
+                        <p>
+                            @Model.AdditionalInfo
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            No additional info
+                        </p>
+                    }
+                </dd>
+            </dl>
+            <hr>
+            <a href="/Appointments/Finish?id=@Model.Id" class="btn btn-lg btn-success text-center">Finish appointment </a>
+            <a href="/Appointments/Mine" class="btn btn-lg btn-outline-primary text-center">Back </a>
+        </article>
+    </div>
+</div>

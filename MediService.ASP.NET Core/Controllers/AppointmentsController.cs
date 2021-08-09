@@ -120,14 +120,15 @@ namespace MediService.ASP.NET_Core.Controllers
 
             var appointments = this.data
                 .Appointments
-                .Where(x => specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
+                .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
+                       && x.IsDone == false
+                       && x.IsCanceled == false)
                 .OrderBy(a => a.Time)
                 .Select(x => new AppointmentViewModel()
                 {
                     Id = x.Id,
-                    IsCanceled = x.IsCanceled ? "Yes" : "No",
-                    IsDone = x.IsDone ? "Yes" : "No",
-                    Time = x.Time.ToLocalTime().ToString("dd-MM-yyyy HH:MM"),
+                    Date = x.Time.ToLocalTime().ToString("dd-MM-yyyy"),
+                    Time = x.Time.ToLocalTime().ToString("HH:mm"),
                     ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
                     Name = specialistId != null ?
                                 x.User.FullName :
@@ -136,6 +137,98 @@ namespace MediService.ASP.NET_Core.Controllers
                 .ToList();
 
             return View(appointments);
+        }
+
+        public IActionResult Details(string id)
+        {
+            var isSpecialist = this.specialists.IsSpecialist(User.Id());
+            if (!isSpecialist)
+            {
+                return NotFound();
+            }
+            var appointment = this.data
+                .Appointments
+                .Where(a => a.Id == id)
+                .Select(x => new AppointmentDetailsViewModel()
+                {
+                    Id = x.Id,
+                    Date = x.Time.ToLocalTime().ToString("dd-MM-yyyy HH:MM"),
+                    AdditionalInfo = x.AdditionalInfo,
+                    Address = x.User.Addresses
+                    .Select(address => address.FullAddress)
+                    .FirstOrDefault(),
+                    City = x.User.Addresses.
+                    Select(address => address.City)
+                    .FirstOrDefault(),
+                    PatientName = x.User.FullName,
+                    Service = x.Service.Name,
+                })
+                .FirstOrDefault();
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            return View(appointment);
+        }
+
+        public IActionResult Finish(string id)
+        {
+            if (!this.specialists.IsSpecialist(User.Id()))
+            {
+                return NotFound();
+            }
+            var appointment = this.data
+                .Appointments
+                .FirstOrDefault(x => x.Id == id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+            appointment.IsDone = true;
+            this.data.SaveChanges();
+
+            return Redirect("/Appointments/Mine");
+        }
+
+        public IActionResult Cancel(string id)
+        {
+            if (this.specialists.IsSpecialist(User.Id()))
+            {
+                return NotFound();
+            }
+            var appointment = this.data
+                .Appointments
+                .FirstOrDefault(x => x.Id == id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+            appointment.IsCanceled = true;
+            this.data.SaveChanges();
+
+            return Redirect("/Appointments/Mine");
+        }
+
+        public IActionResult All()
+        {
+            var userId = this.User.Id();
+            var specialistId = this.specialists.IdByUser(userId);
+
+            var pastAppointments = this.data
+                .Appointments
+                .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
+                       && (x.IsDone == true
+                       || x.IsCanceled == true))
+                .Select(x => new AppointmentPastViewModel()
+                {
+                    Date = x.Time.ToLocalTime().ToString("dd-MM-yyyy"),
+                    ServiceName = x.Service.Name,
+                    Status = x.IsDone ? "Finished" : "Canceled"
+                })
+                .ToList();
+
+            return View(pastAppointments);
         }
 
         private IEnumerable<ServiceViewFormModel> GetMediServices()

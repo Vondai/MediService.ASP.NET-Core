@@ -1,0 +1,36 @@
+﻿@model List<AppointmentPastViewModel>
+
+@{
+    ViewData["Title"] = "All appointments";
+}
+
+<div class="container">
+    <h2 class="heading-margin text-center">Past appointments</h2>
+    @if (!Model.Any())
+    {
+        <h3 class="text-center">You do not have any past appointments.</h3>
+    }
+    else
+    {
+        <table class="table table-info col-sm-12 offset-lg-2 col-lg-8 offset-xl-2 col-xl-8">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Service</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model)
+                {
+                    <tr>
+                        <td>@appointment.Date</td>
+                        <td>@appointment.Status</td>
+                        <td>@appointment.ServiceName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <a href="/Appointments/Mine" class="btn btn-outline-primary text-center">Back </a>
+</div>

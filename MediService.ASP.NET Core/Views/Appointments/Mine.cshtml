@@ -13,16 +13,16 @@
     <h2 class="heading-margin text-center">My appointments</h2>
     @if (!Model.Any())
     {
-        <h3 class="text-center">You do not have any appointments.</h3>
+        <h3 class="text-center">You do not have any active appointments.</h3>
+        <a class="btn btn-primary" href="/Appointments/All">All past appointments</a>
     }
     else
     {
-        <table class="table table-info">
+        <table class="table table-info col-sm-12 offset-lg-2 col-lg-8 offset-xl-2 col-xl-8">
             <thead>
                 <tr>
+                    <th scope="col">Date</th>
                     <th scope="col">Time</th>
-                    <th scope="col">Is it done</th>
-                    <th scope="col">Is it canceled</th>
                     <th scope="col">Service</th>
                     @if (isSpecialist)
                     {
@@ -38,12 +38,18 @@
                 @foreach (var appointment in Model)
                 {
                     <tr>
+                        <td>@appointment.Date</td>
                         <td>@appointment.Time</td>
-                        <td>@appointment.IsDone</td>
-                        <td>@appointment.IsCanceled</td>
                         <td>@appointment.ServiceName</td>
                         <td>@appointment.Name</td>
-                        <td><a href="/Appointments/Details?@appointment.Id">View more</a></td>
+                        @if (isSpecialist)
+                        {
+                            <td><a class="btn btn-primary" href="/Appointments/Details?id=@appointment.Id">View more</a></td>
+                        }
+                        else
+                        {
+                            <td><a class="btn btn-danger" href="/Appointments/Cancel?id=@appointment.Id">Cancel Appointment</a></td>
+                        }
                     </tr>
                 }
             </tbody>
