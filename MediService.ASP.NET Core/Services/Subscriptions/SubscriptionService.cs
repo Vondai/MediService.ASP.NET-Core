@@ -35,10 +35,10 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
                 })
                 .ToList();
 
-        public Subscription GetSubscription(int subscriptionId)
+        public bool IsValidSubcription(int subscriptionId)
             => this.data
                 .Subscriptions
-                .FirstOrDefault(x => x.Id == subscriptionId);
+                .Any(x => x.Id == subscriptionId);
 
         public Dictionary<int, SubscriptionFormModel> GetSubscriptions()
             => this.data
@@ -53,14 +53,12 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
                 })
                 .ToDictionary(x => x.Id);
 
-        public async Task SubscribeUser(Subscription newSubscription, User user)
+        public async Task SubscribeUser(int subscriptionId, string userId)
         {
-            var currentSubscription = this.GetUserSubscription(user);
-            if (currentSubscription != null)
-            {
-                currentSubscription.Users.Remove(user);
-            }
-            newSubscription.Users.Add(user);
+            var user = this.data
+                .Users
+                .FirstOrDefault(u => u.Id == userId);
+            user.SubscriptionId = subscriptionId;
             await this.data.SaveChangesAsync();
         }
 

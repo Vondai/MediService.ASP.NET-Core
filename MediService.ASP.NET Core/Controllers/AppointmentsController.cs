@@ -239,7 +239,7 @@ namespace MediService.ASP.NET_Core.Controllers
             return Redirect("/Appointments/Mine");
         }
 
-        public IActionResult All()
+        public IActionResult Archive()
         {
             var userId = this.User.Id();
             var specialistId = this.specialists.IdByUser(userId);

@@ -11,10 +11,10 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
 
         ICollection<SubscriptionViewModel> GetAll();
 
-        Subscription GetSubscription(int subscriptionId);
+        bool IsValidSubcription(int subscriptionId);
 
 
-        Task SubscribeUser(Subscription newSubscription, User user);
+        Task SubscribeUser(int subscriptionId, string userId);
 
         Dictionary<int, SubscriptionFormModel> GetSubscriptions();
     }

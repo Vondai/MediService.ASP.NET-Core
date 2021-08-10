@@ -67,15 +67,15 @@ namespace MediService.ASP.NET_Core.Controllers
             {
                 return View(new SubscribeFormModel() { Subscriptions = this.subscriptions.GetSubscriptions() });
             }
-            var subscription = this.subscriptions.GetSubscription(model.SubscriptionId);
-            if (subscription == null)
+            var isValidSubcription = this.subscriptions.IsValidSubcription(model.SubscriptionId);
+            if (!isValidSubcription)
             {
                 ModelState.AddModelError(nameof(model.SubscriptionId), "Select a valid subscription plan.");
                 model.Subscriptions = this.subscriptions.GetSubscriptions();
                 return View(model);
             }
-            var user = await this.userManager.GetUserAsync(this.User);
-            await this.subscriptions.SubscribeUser(subscription, user);
+            var userId = this.User.Id();
+            await this.subscriptions.SubscribeUser(model.SubscriptionId, userId);
             TempData.Add("Success", "Successful subscription.");
 
             return Redirect("/Appointments/Make");
