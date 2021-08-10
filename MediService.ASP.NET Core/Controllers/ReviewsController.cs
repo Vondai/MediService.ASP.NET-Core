@@ -1,62 +1,44 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Models.Reviews;
-using MediService.ASP.NET_Core.Data.Models;
-using MediService.ASP.NET_Core.Data.Enums;
 using MediService.ASP.NET_Core.Infrastructure;
+using MediService.ASP.NET_Core.Services.Reviews;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class ReviewsController : Controller
     {
-        private readonly MediServiceDbContext data;
+        private readonly IReviewService reviews;
 
-        public ReviewsController(MediServiceDbContext data)
+        public ReviewsController(IReviewService reviews)
         {
-            this.data = data;
+            this.reviews = reviews;
         }
 
-        public IActionResult Create() 
-        {
-            var userId = this.User.Id();
-            if (userId == null)
-            {
-                TempData.Add("Error", "Please register first.");
-                return Redirect("/Account/Register");
-            }
-            return View(new CreateReviewFormModel());
-        }
+        [Authorize]
+        public IActionResult Create()
+            => View(new CreateReviewFormModel());
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateReviewFormModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var isValidRating = Enum.IsDefined(typeof(Rating), model.Rating);
+            var isValidRating = this.reviews.IsValidRating(model.Rating);
             if (!isValidRating)
             {
-                ModelState.AddModelError(nameof(model.Rating), $"Invalid rating.");
+                ModelState.AddModelError(nameof(model.Rating), "Invalid rating.");
                 return View(model);
             }
-            var userId = this.data.Users
-                .Where(x => x.UserName == User.Identity.Name)
-                .Select(x => x.Id)
-                .FirstOrDefault();
-            var review = new Review()
-            {
-                Title = model.Title,
-                Description = model.Description,
-                Rating = model.Rating,
-                UserId = userId,
-            };
-            await this.data.Reviews.AddAsync(review);
-            await this.data.SaveChangesAsync();
 
+            var userId = this.User.Id();
+            await this.reviews.Create(model.Title, model.Description, model.Rating, userId);
+
+            TempData.Add("Success", "Thank you for the review!");
             return Redirect("/Home");
         }
     }

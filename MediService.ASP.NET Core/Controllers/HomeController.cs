@@ -1,53 +1,45 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using MediService.ASP.NET_Core.Data;
-using MediService.ASP.NET_Core.Data.Enums;
-using MediService.ASP.NET_Core.Models;
+using Microsoft.Extensions.Caching.Memory;
 using MediService.ASP.NET_Core.Models.Reviews;
+using MediService.ASP.NET_Core.Services.Reviews;
+
+using static MediService.ASP.NET_Core.WebConstants.Cache;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly MediServiceDbContext data;
+        private readonly IReviewService reviews;
+        private readonly IMemoryCache cache;
 
-        public HomeController(MediServiceDbContext data)
+        public HomeController(IReviewService reviews, IMemoryCache cache)
         {
-            this.data = data;
+            this.reviews = reviews;
+            this.cache = cache;
         }
 
         public IActionResult Index()
         {
-            var reviews = this.data.Reviews
-                .OrderByDescending(x => x.Rating)
-                .Select(x => new ReviewViewModel()
-                {
-                    Title = x.Title,
-                    Description = x.Description,
-                    Rating = ((Rating)x.Rating).ToString(),
-                    Username = this.data.Users
-                    .Where(u => u.Id == x.UserId)
-                    .Select(u => u.UserName)
-                    .FirstOrDefault(),
-                })
-                .Take(4)
-                .ToList();
+            var reviews = this.cache.Get<ICollection<ReviewViewModel>>(RecentReviewsCacheKey);
+            if (reviews == null)
+            {
+                reviews = this.reviews.GetRecent();
+
+                var options = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+                this.cache.Set(RecentReviewsCacheKey, reviews, options);
+            }
 
             return View(reviews);
         }
 
         public IActionResult Faq() => View();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }

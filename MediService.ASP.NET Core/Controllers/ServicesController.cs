@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MediService.ASP.NET_Core.Data;
-using MediService.ASP.NET_Core.Models.Services;
 using Microsoft.Extensions.Caching.Memory;
-using System.Collections.Generic;
+using MediService.ASP.NET_Core.Models.Services;
+using MediService.ASP.NET_Core.Services.MedicalServices;
 
 using static MediService.ASP.NET_Core.WebConstants.Cache;
 
@@ -13,27 +12,21 @@ namespace MediService.ASP.NET_Core.Controllers
 {
     public class ServicesController : Controller
     {
-        private readonly MediServiceDbContext data;
+        private readonly IMedicalService medicalServices;
         private readonly IMemoryCache cache;
-        public ServicesController(MediServiceDbContext data, IMemoryCache cache)
+        public ServicesController(IMemoryCache cache, IMedicalService medicalServices)
         {
-            this.data = data;
             this.cache = cache;
+            this.medicalServices = medicalServices;
         }
         [AllowAnonymous]
         public IActionResult All()
         {
-            var services = this.cache.Get<List<ServiceViewModel>>(AllServicesCacheKey);
+            var services = this.cache.Get<ICollection<ServiceViewModel>>(AllServicesCacheKey);
             if (services == null)
             {
-                services = data.Services
-                    .OrderBy(x => x.Name)
-                    .Select(x => new ServiceViewModel()
-                    {
-                        Name = x.Name,
-                        Description = x.Description,
-                    })
-                    .ToList();
+                services = this.medicalServices.GetAll();
+
                 var options = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromDays(1));
                 this.cache.Set(AllServicesCacheKey, services, options);

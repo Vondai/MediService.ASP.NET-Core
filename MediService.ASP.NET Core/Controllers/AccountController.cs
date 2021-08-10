@@ -68,7 +68,7 @@ namespace MediService.ASP.NET_Core.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(UserLoginFormModel model)
+        public async Task<IActionResult> Login(UserLoginFormModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,10 @@ namespace MediService.ASP.NET_Core.Controllers
                 ModelState.AddModelError(nameof(model.Username), "Invalid username or password.");
                 return View(model);
             }
-
+            if (returnUrl != null)
+            {
+                return Redirect(returnUrl);
+            }
             return Redirect("/Home");
         }
 

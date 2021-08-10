@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Infrastructure;
+using MediService.ASP.NET_Core.Services.MedicalServices;
+using MediService.ASP.NET_Core.Services.Reviews;
 using MediService.ASP.NET_Core.Services.Specialists;
 
 namespace MediService.ASP.NET_Core
@@ -44,6 +46,8 @@ namespace MediService.ASP.NET_Core
             });
             services.AddMemoryCache();
             services.AddTransient<ISpecialistService, SpecialistService>();
+            services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<IMedicalService, MedicalService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
