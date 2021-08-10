@@ -25,7 +25,7 @@ namespace MediService.ASP.NET_Core.Controllers
         [AllowAnonymous]
         public IActionResult All()
         {
-            var specialists = this.cache.Get<List<SpecialistViewModel>>(AllSpecialistsCacheKey);
+            var specialists = this.cache.Get<List<SpecialistViewModel>>(AllSpecialistsKey);
             if (specialists == null)
             {
                 specialists = this.data
@@ -42,7 +42,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 .ToList();
                 var options = new MemoryCacheEntryOptions()
                 .SetAbsoluteExpiration(TimeSpan.FromDays(1));
-                this.cache.Set(AllSpecialistsCacheKey, specialists, options);
+                this.cache.Set(AllSpecialistsKey, specialists, options);
             }
 
             return View(specialists);

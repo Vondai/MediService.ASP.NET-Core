@@ -1,46 +1,53 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MediService.ASP.NET_Core.Data;
+using Microsoft.Extensions.Caching.Memory;
+using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Models.Subscriptions;
+using MediService.ASP.NET_Core.Services.Subscriptions;
+
+using static MediService.ASP.NET_Core.WebConstants.Cache;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class SubscriptionsController : Controller
     {
-        private readonly MediServiceDbContext data;
+        private readonly ISubscriptionService subscriptions;
+        private readonly IMemoryCache cache;
+        private readonly UserManager<User> userManager;
 
-        public SubscriptionsController(MediServiceDbContext data)
+        public SubscriptionsController(ISubscriptionService subscriptions, IMemoryCache cache, UserManager<User> userManager)
         {
-            this.data = data;
+            this.subscriptions = subscriptions;
+            this.cache = cache;
+            this.userManager = userManager;
         }
 
         [AllowAnonymous]
         public IActionResult All()
         {
-            var subscriptions = this.data.Subscriptions
-                .OrderBy(x => x.Price)
-                .Select(s => new SubscriptionViewModel()
-                {
-                    Name = s.Name,
-                    Price = s.Price.ToString(),
-                    AppointmentCount = s.AppointmentCount.ToString(),
-                })
-                .ToList();
+            var subs = this.cache.Get<ICollection<SubscriptionViewModel>>(AllSubscriptionsKey);
+            if (subs == null)
+            {
+                subs = this.subscriptions.GetAll();
 
-            return View(subscriptions);
+                var options = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromDays(1));
+                this.cache.Set(AllSubscriptionsKey, subs, options);
+            }
+
+            return View(subs);
         }
 
         [Authorize]
         public IActionResult Subscribe()
         {
             var userId = this.User.Id();
-            var activeAppointments = this.data
-                .Appointments
-                .Where(a => a.User.Id == userId && a.IsCanceled == false && a.IsDone == false)
-                .Count();
+            var activeAppointments = this.subscriptions.ActiveAppointments(userId);
             if (activeAppointments > 0)
             {
                 TempData.Add("Error", "You have active appointments.");
@@ -48,55 +55,30 @@ namespace MediService.ASP.NET_Core.Controllers
             }
             return View(new SubscribeFormModel()
             {
-                Subscriptions = GetSubscriptions()
+                Subscriptions = this.subscriptions.GetSubscriptions()
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Subscribe(SubscribeFormModel model)
+        public async Task<IActionResult> Subscribe(SubscribeFormModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(new SubscribeFormModel() { Subscriptions = GetSubscriptions() });
+                return View(new SubscribeFormModel() { Subscriptions = this.subscriptions.GetSubscriptions() });
             }
-            var subscription = this.data
-                .Subscriptions
-                .FirstOrDefault(x => x.Id == model.SubscriptionId);
+            var subscription = this.subscriptions.GetSubscription(model.SubscriptionId);
             if (subscription == null)
             {
-                ModelState.AddModelError(nameof(model.SubscriptionId), "Select a subscription plan.");
-                model.Subscriptions = GetSubscriptions();
+                ModelState.AddModelError(nameof(model.SubscriptionId), "Select a valid subscription plan.");
+                model.Subscriptions = this.subscriptions.GetSubscriptions();
                 return View(model);
             }
-            var user = this.data
-                .Users.FirstOrDefault(x => x.Id == this.User.Id());
-            var currentSubscription = this.data
-                .Subscriptions
-                .Where(x => x.Users.Contains(user))
-                .FirstOrDefault();
-            if (currentSubscription != null)
-            {
-                currentSubscription.Users.Remove(user);
-            }
-            subscription.Users.Add(user);
-            this.data.SaveChanges();
+            var user = await this.userManager.GetUserAsync(this.User);
+            await this.subscriptions.SubscribeUser(subscription, user);
             TempData.Add("Success", "Successful subscription.");
+
             return Redirect("/Appointments/Make");
         }
-
-        public Dictionary<int, SubscriptionFormModel> GetSubscriptions()
-        => this.data
-            .Subscriptions
-            .OrderBy(s => s.Price)
-            .Select(x => new SubscriptionFormModel()
-            {
-                Id = x.Id,
-                AppointmentCount = x.AppointmentCount,
-                Name = x.Name,
-                Price = x.Price.ToString(),
-            })
-            .ToDictionary(x => x.Id);
-
     }
 }

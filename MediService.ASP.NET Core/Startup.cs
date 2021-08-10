@@ -11,6 +11,7 @@ using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Services.MedicalServices;
 using MediService.ASP.NET_Core.Services.Reviews;
 using MediService.ASP.NET_Core.Services.Specialists;
+using MediService.ASP.NET_Core.Services.Subscriptions;
 
 namespace MediService.ASP.NET_Core
 {
@@ -48,6 +49,7 @@ namespace MediService.ASP.NET_Core
             services.AddTransient<ISpecialistService, SpecialistService>();
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IMedicalService, MedicalService>();
+            services.AddTransient<ISubscriptionService, SubscriptionService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

@@ -22,14 +22,14 @@ namespace MediService.ASP.NET_Core.Controllers
         [AllowAnonymous]
         public IActionResult All()
         {
-            var services = this.cache.Get<ICollection<ServiceViewModel>>(AllServicesCacheKey);
+            var services = this.cache.Get<ICollection<ServiceViewModel>>(AllServicesKey);
             if (services == null)
             {
                 services = this.medicalServices.GetAll();
 
                 var options = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromDays(1));
-                this.cache.Set(AllServicesCacheKey, services, options);
+                this.cache.Set(AllServicesKey, services, options);
             }
 
             return View(services);

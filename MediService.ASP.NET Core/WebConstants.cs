@@ -4,9 +4,10 @@
     {
         public class Cache
         {
-            public const string RecentReviewsCacheKey = nameof(RecentReviewsCacheKey);
-            public const string AllSpecialistsCacheKey = nameof(AllSpecialistsCacheKey);
-            public const string AllServicesCacheKey = nameof(AllServicesCacheKey);
+            public const string RecentReviewsKey = nameof(RecentReviewsKey);
+            public const string AllSpecialistsKey = nameof(AllSpecialistsKey);
+            public const string AllServicesKey = nameof(AllServicesKey);
+            public const string AllSubscriptionsKey = nameof(AllSubscriptionsKey);
         }
     }
 }

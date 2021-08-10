@@ -22,14 +22,14 @@ namespace MediService.ASP.NET_Core.Controllers
 
         public IActionResult Index()
         {
-            var reviews = this.cache.Get<ICollection<ReviewViewModel>>(RecentReviewsCacheKey);
+            var reviews = this.cache.Get<ICollection<ReviewViewModel>>(RecentReviewsKey);
             if (reviews == null)
             {
                 reviews = this.reviews.GetRecent();
 
                 var options = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-                this.cache.Set(RecentReviewsCacheKey, reviews, options);
+                this.cache.Set(RecentReviewsKey, reviews, options);
             }
 
             return View(reviews);
