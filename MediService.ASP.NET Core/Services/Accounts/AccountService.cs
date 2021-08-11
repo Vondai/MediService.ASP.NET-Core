@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MediService.ASP.NET_Core.Data;
+using MediService.ASP.NET_Core.Data.Models;
 
 namespace MediService.ASP.NET_Core.Services.Accounts
 {
@@ -9,6 +10,30 @@ namespace MediService.ASP.NET_Core.Services.Accounts
 
         public AccountService(MediServiceDbContext data)
             => this.data = data;
+
+        public User CreateUser(
+            string username, 
+            string email, 
+            string fullName, 
+            string phoneNumber, 
+            string city, 
+            string address)
+        {
+            var useraddress = new Address()
+            {
+                City = city,
+                FullAddress = address,
+            };
+            var user = new User()
+            {
+                UserName = username,
+                Email = email,
+                FullName = fullName,
+                PhoneNumber = phoneNumber,
+            };
+            user.Addresses.Add(useraddress);
+            return user;
+        }
 
         public string GetAddress(string userId)
             => this.data.

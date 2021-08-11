@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data.Models;
-using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Models.Users;
 using MediService.ASP.NET_Core.Services.Appointments;
 using MediService.ASP.NET_Core.Services.Specialists;
+using MediService.ASP.NET_Core.Services.Accounts;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -14,6 +14,7 @@ namespace MediService.ASP.NET_Core.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly IAccountService accounts;
         private readonly IAppointmentService appointments;
         private readonly ISpecialistService specialists;
 
@@ -21,12 +22,14 @@ namespace MediService.ASP.NET_Core.Controllers
             (UserManager<User> userManager,
             SignInManager<User> signInManager,
             IAppointmentService appointments,
-            ISpecialistService specialists)
+            ISpecialistService specialists,
+            IAccountService accounts)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.appointments = appointments;
             this.specialists = specialists;
+            this.accounts = accounts;
         }
         [AllowAnonymous]
         public IActionResult Register() => View();
@@ -44,29 +47,19 @@ namespace MediService.ASP.NET_Core.Controllers
                 return View(model);
             }
 
-            var address = new Address()
-            {
-                City = model.City,
-                FullAddress = model.Address,
-            };
-            var user = new User()
-            {
-                UserName = model.Username,
-                Email = model.Email,
-                FullName = model.FullName,
-                PhoneNumber = model.Phone,
-            };
-            user.Addresses.Add(address);
+            var user = this.accounts.CreateUser(
+                model.Username,
+                model.Email,
+                model.FullName,
+                model.Phone, model.City,
+                model.Address);
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
                 {
-                    if (error.Code == "DuplicateUserName")
-                    {
-                        ModelState.AddModelError(nameof(model.Username), error.Description);
-                    }
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
                 return View(model);
             }
@@ -88,12 +81,8 @@ namespace MediService.ASP.NET_Core.Controllers
             var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
             if (!result.Succeeded)
             {
-                ModelState.AddModelError(nameof(model.Username), "Invalid username or password.");
+                ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 return View(model);
-            }
-            if (returnUrl != null)
-            {
-                return Redirect(returnUrl);
             }
             var user = await this.userManager.FindByNameAsync(model.Username);
             var userId = user.Id;
@@ -102,6 +91,10 @@ namespace MediService.ASP.NET_Core.Controllers
             if (archivedAppointments > 0)
             {
                 TempData.Add("Success", $"{archivedAppointments} appointment/s archived.");
+            }
+            if (returnUrl != null)
+            {
+                return Redirect(returnUrl);
             }
             return Redirect("/Home");
         }
