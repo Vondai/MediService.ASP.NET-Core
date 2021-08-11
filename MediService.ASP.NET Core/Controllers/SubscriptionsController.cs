@@ -11,20 +11,28 @@ using MediService.ASP.NET_Core.Models.Subscriptions;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 
 using static MediService.ASP.NET_Core.WebConstants.Cache;
+using MediService.ASP.NET_Core.Services.Appointments;
+using MediService.ASP.NET_Core.Services.Specialists;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class SubscriptionsController : Controller
     {
         private readonly ISubscriptionService subscriptions;
+        private readonly IAppointmentService appointments;
+        private readonly ISpecialistService specialists;
         private readonly IMemoryCache cache;
-        private readonly UserManager<User> userManager;
 
-        public SubscriptionsController(ISubscriptionService subscriptions, IMemoryCache cache, UserManager<User> userManager)
+        public SubscriptionsController
+            (ISubscriptionService subscriptions,
+            IMemoryCache cache,
+            IAppointmentService appointments,
+            ISpecialistService specialists)
         {
             this.subscriptions = subscriptions;
             this.cache = cache;
-            this.userManager = userManager;
+            this.appointments = appointments;
+            this.specialists = specialists;
         }
 
         [AllowAnonymous]
@@ -47,6 +55,14 @@ namespace MediService.ASP.NET_Core.Controllers
         public IActionResult Subscribe()
         {
             var userId = this.User.Id();
+            var isSpecialist = this.specialists.IsSpecialist(userId);
+            if (isSpecialist)
+            {
+                TempData.Add("Error", "Specialists cannot subscribe.");
+                return Redirect("/Home");
+            }
+            //Archive appointments
+            this.appointments.ArchiveAppointments(userId);
             var activeAppointments = this.subscriptions.ActiveAppointments(userId);
             if (activeAppointments > 0)
             {
@@ -65,7 +81,8 @@ namespace MediService.ASP.NET_Core.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(new SubscribeFormModel() { Subscriptions = this.subscriptions.GetSubscriptions() });
+                model.Subscriptions = this.subscriptions.GetSubscriptions();
+                return View(model);
             }
             var isValidSubcription = this.subscriptions.IsValidSubcription(model.SubscriptionId);
             if (!isValidSubcription)

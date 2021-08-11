@@ -9,6 +9,11 @@ using MediService.ASP.NET_Core.Models.Appointments;
 using MediService.ASP.NET_Core.Models.Services;
 using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Services.Specialists;
+using MediService.ASP.NET_Core.Services.Subscriptions;
+using MediService.ASP.NET_Core.Services.Appointments;
+using MediService.ASP.NET_Core.Services.Accounts;
+using MediService.ASP.NET_Core.Services.MedicalServices;
+using System.Threading.Tasks;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -17,134 +22,123 @@ namespace MediService.ASP.NET_Core.Controllers
     {
         private readonly MediServiceDbContext data;
         private readonly ISpecialistService specialists;
+        private readonly ISubscriptionService subscriptions;
+        private readonly IAppointmentService appointments;
+        private readonly IAccountService accounts;
+        private readonly IMedicalService medicalService;
 
         public AppointmentsController
             (MediServiceDbContext data,
-            ISpecialistService specialists)
+            ISpecialistService specialists,
+            ISubscriptionService subscriptions,
+            IAppointmentService appointments,
+            IAccountService accounts, IMedicalService medicalService)
         {
             this.data = data;
             this.specialists = specialists;
+            this.subscriptions = subscriptions;
+            this.appointments = appointments;
+            this.accounts = accounts;
+            this.medicalService = medicalService;
         }
 
-        public IActionResult Make()
+        public async Task<IActionResult> Make()
         {
             var userId = this.User.Id();
-            var isSubscriber = this.data
-                .Users
-                .Any(u => u.Id == userId && u.SubscriptionId.HasValue);
+
+            //Cannot make appointments if user is a specialist.
             var isSpecialist = specialists.IsSpecialist(userId);
             if (isSpecialist)
             {
                 this.TempData.Add("Error", "Only non-specialists can make appointments.");
                 return Redirect("/Home");
             }
+            //Cannot make appointments if user is not a subscriber.
+            var isSubscriber = this.subscriptions.IsSubscriber(userId);
             if (!isSubscriber)
             {
                 this.TempData.Add("Error", "Only subscribers can make appointments.");
                 return Redirect("/Subscriptions/All");
             }
-            var appointmentCount = this.data
-                .Appointments
-                .Where(a => a.UserId == userId
-                    && a.IsCanceled == false
-                    && a.IsDone == false)
-                .Count();
-            var subscriptionAppointmentCount = this.data
-                .Users
-                .Where(u => u.Id == userId)
-                .Select(x => x.Subscription.AppointmentCount)
-                .FirstOrDefault();
-            if (appointmentCount == subscriptionAppointmentCount)
+            //Archive appointments
+            await this.appointments.ArchiveAppointments(userId);
+            //Cannot make an appointment if user has reached the maximum count of available appointments.
+            var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
+            var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
+            if (userAppointmentCount == subscriptionAppointmentCount)
             {
                 this.TempData.Add("Error", "You have reached the maximum number of appointments for the current subscription plan.");
                 return Redirect("/Appointments/Mine");
             }
-
+            //Appointments left for the current subscription plan
+            var userAppointmentsLeft = subscriptionAppointmentCount - userAppointmentCount;
             return View(new AppointmentFormModel()
             {
-                Address = GetUserAddress(),
-                Services = GetMediServices(),
-                AppointmentsLeft = AppointmentsLeft()
+                Address = this.accounts.GetAddress(userId),
+                Services = this.medicalService.GetServices(),
+                AppointmentsLeft = userAppointmentsLeft
             });
         }
 
         [HttpPost]
-        public IActionResult Make(AppointmentFormModel model)
+        public async Task<IActionResult> Make(AppointmentFormModel model)
         {
+            var userId = this.User.Id();
             if (!ModelState.IsValid)
             {
-                return View(new AppointmentFormModel()
-                {
-                    Address = GetUserAddress(),
-                    Services = GetMediServices(),
-                });
+                model.Services = this.medicalService.GetServices();
+                return View(model);
             }
-            if (model.Address != GetUserAddress())
+            //Check for account address
+            if (model.Address != this.accounts.GetAddress(userId))
             {
-                ModelState.AddModelError(nameof(model.Address), "Invalid Address.");
-                return View(new AppointmentFormModel()
-                {
-                    Address = GetUserAddress(),
-                    Services = GetMediServices(),
-                });
+                ModelState.AddModelError(string.Empty, "Invalid Address.");
             }
-            var isValidService = this.data.Services.Any(x => x.Id == model.ServiceId);
+            //Check for invalid medical service
+            var isValidService = this.medicalService.IsValidService(model.ServiceId);
             if (!isValidService)
             {
-                ModelState.AddModelError(nameof(model.ServiceId), "Invalid service.");
-                return View(new AppointmentFormModel()
-                {
-                    Address = GetUserAddress(),
-                    Services = GetMediServices(),
-                });
+                ModelState.AddModelError(string.Empty, "Invalid service.");
             }
-            var isValidDate = DateTime.TryParse(model.Time, out DateTime time);
+            //Check for invalid date format
+            var isValidDate = DateTime.TryParse(model.Date, out DateTime date);
             if (!isValidDate)
             {
-                ModelState.AddModelError(nameof(model.Time), "Invalid date.");
-                return View(new AppointmentFormModel()
-                {
-                    Address = GetUserAddress(),
-                    Services = GetMediServices(),
-                });
+                ModelState.AddModelError(string.Empty, "Invalid date.");
             }
-            if (time.ToUniversalTime().Day < DateTime.UtcNow.Day
-                && time.ToUniversalTime() > DateTime.UtcNow.AddDays(30))
+            //Check for invalid date input
+            var canMakeAppointmentFromDate = this.appointments.CanMakeAppointmentFromDate(date);
+            if (!canMakeAppointmentFromDate)
             {
-                ModelState.AddModelError(nameof(model.Time), "Invalid date.");
-                return View(new AppointmentFormModel()
-                {
-                    Address = GetUserAddress(),
-                    Services = GetMediServices(),
-                });
+                ModelState.AddModelError
+                    (string.Empty, $"Date must be between {DateTime.Now:MM-dd-yyyy HH:mm} and {DateTime.Now.AddMonths(1):MM-dd-yyyy HH:mm}.");
             }
-            var specialistId = this.data.Specialists
-                .Where(x => x.Services
-                .Any(s => s.Id == model.ServiceId))
-                .Select(x => x.Id)
-                .FirstOrDefault();
-            var appointment = new Appointment()
+            if (ModelState.ErrorCount > 0)
             {
-                AdditionalInfo = model.AdditionalInfo,
-                IsCanceled = false,
-                IsDone = false,
-                ServiceId = model.ServiceId,
-                SpecialistId = specialistId,
-                Date = time.ToUniversalTime(),
-                UserId = this.User.Id(),
-            };
-            this.data.Appointments.Add(appointment);
-            this.data.SaveChanges();
+                model.Services = this.medicalService.GetServices();
+                var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
+                var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
+                model.AppointmentsLeft = subscriptionAppointmentCount - userAppointmentCount;
+                return View(model);
+            }
+            var specialistId = this.specialists.GetIdFromService(model.ServiceId);
+            await this.appointments.CreateAppointment
+                (model.AdditionalInfo,
+                model.ServiceId,
+                specialistId,
+                date,
+                userId);
 
             TempData.Add("Success", "Successful appointment.");
             return Redirect("/Appointments/Mine");
         }
 
-        public IActionResult Mine()
+        public async Task<IActionResult> Mine()
         {
             var userId = this.User.Id();
             var specialistId = this.specialists.IdByUser(userId);
-
+            //Archive appointments
+            await this.appointments.ArchiveAppointments(userId, specialistId);
             var appointments = this.data
                 .Appointments
                 .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
@@ -154,7 +148,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 .Select(x => new AppointmentViewModel()
                 {
                     Id = x.Id,
-                    Date = x.Date.ToLocalTime().ToString("dd-MM-yyyy"),
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy"),
                     Time = x.Date.ToLocalTime().ToString("HH:mm"),
                     ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
                     Name = specialistId != null ?
@@ -179,7 +173,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 .Select(x => new AppointmentDetailsViewModel()
                 {
                     Id = x.Id,
-                    Date = x.Date.ToLocalTime().ToString("dd-MM-yyyy HH:MM"),
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy HH:MM"),
                     AdditionalInfo = x.AdditionalInfo,
                     Address = x.User.Addresses
                     .Select(address => address.FullAddress)
@@ -216,6 +210,7 @@ namespace MediService.ASP.NET_Core.Controllers
             }
             appointment.IsDone = true;
             this.data.SaveChanges();
+            TempData.Add("Success", "Successfuly archived appointment.");
 
             return Redirect("/Appointments/Mine");
         }
@@ -252,7 +247,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 .OrderBy(x => x.Date)
                 .Select(x => new AppointmentPastViewModel()
                 {
-                    Date = x.Date.ToLocalTime().ToString("dd-MM-yyyy"),
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy"),
                     ServiceName = x.Service.Name,
                     Status = x.IsDone ? "Finished" : "Canceled"
                 })
@@ -260,40 +255,5 @@ namespace MediService.ASP.NET_Core.Controllers
 
             return View(pastAppointments);
         }
-
-        private int AppointmentsLeft()
-        {
-            var user = this.data
-                .Users
-                .FirstOrDefault(u => u.Id == User.Id());
-            var appointmentCount = this.data
-                .Subscriptions
-                .Where(s => s.Users.Contains(user))
-                .Select(x => x.AppointmentCount)
-                .FirstOrDefault();
-            var currAppointmentCount = this.data
-                .Appointments
-                .Where(a => a.User == user
-                    && a.IsCanceled == false
-                    && a.IsDone == false)
-                .Count();
-            return appointmentCount - currAppointmentCount;
-        }
-
-        private IEnumerable<ServiceViewFormModel> GetMediServices()
-        => this.data.Services
-            .Select(x => new ServiceViewFormModel
-            {
-                Id = x.Id,
-                Name = x.Name
-            })
-            .ToList();
-
-        private string GetUserAddress()
-        => this.data.
-            Addresses
-            .Where(x => x.UserId == this.User.Id())
-            .Select(x => x.FullAddress)
-            .FirstOrDefault();
     }
 }

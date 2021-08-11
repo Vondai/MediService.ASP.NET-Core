@@ -14,6 +14,10 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
             this.data = data;
         }
 
+        public bool IsValidService(int serviceId)
+            => this.data.Services
+                .Any(x => x.Id == serviceId);
+
         public ICollection<ServiceViewModel> GetAll()
             => this.data.Services
                     .OrderBy(x => x.Name)
@@ -23,5 +27,14 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
                         Description = x.Description,
                     })
                     .ToList();
+
+        public ICollection<ServiceViewFormModel> GetServices()
+            => this.data.Services
+               .Select(x => new ServiceViewFormModel
+               {
+                   Id = x.Id,
+                   Name = x.Name
+               })
+               .ToList();
     }
 }

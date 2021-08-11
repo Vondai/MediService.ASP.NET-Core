@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SubscriptionId"></label>
-                <select id="subsciptionMenu" asp-for="SubscriptionId" class="form-control" onchange="calcPrice()">
+                <select id="subsciptionMenu" asp-for="SubscriptionId" class="form-control" onclick="calcPrice()">
                     <option value="" selected disabled hidden>Choose a subscription plan</option>
                     @foreach (var (key, subscription) in Model.Subscriptions)
                     {

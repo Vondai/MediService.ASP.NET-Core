@@ -13,6 +13,10 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
 
         bool IsValidSubcription(int subscriptionId);
 
+        bool IsSubscriber(string userId);
+
+        int GetSubscriptionAppointmentCount(string userId);
+
 
         Task SubscribeUser(int subscriptionId, string userId);
 

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediService.ASP.NET_Core.Data;
-using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Models.Subscriptions;
 
 namespace MediService.ASP.NET_Core.Services.Subscriptions
@@ -40,6 +39,18 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
                 .Subscriptions
                 .Any(x => x.Id == subscriptionId);
 
+        public bool IsSubscriber(string userId)
+            => this.data
+                .Users
+                .Any(u => u.Id == userId && u.SubscriptionId.HasValue);
+
+        public int GetSubscriptionAppointmentCount(string userId)
+            => this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(x => x.Subscription.AppointmentCount)
+                .FirstOrDefault();
+
         public Dictionary<int, SubscriptionFormModel> GetSubscriptions()
             => this.data
                 .Subscriptions
@@ -61,11 +72,5 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
             user.SubscriptionId = subscriptionId;
             await this.data.SaveChangesAsync();
         }
-
-        private Subscription GetUserSubscription(User user)
-            => this.data
-                .Subscriptions
-                .Where(x => x.Users.Contains(user))
-                .FirstOrDefault();
     }
 }

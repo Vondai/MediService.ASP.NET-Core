@@ -12,6 +12,13 @@ namespace MediService.ASP.NET_Core.Services.Specialists
             this.data = data;
         }
 
+        public string GetIdFromService(int serviceId)
+        => this.data.Specialists
+                .Where(x => x.Services
+                .Any(s => s.Id == serviceId))
+                .Select(x => x.Id)
+                .FirstOrDefault();
+
         public string IdByUser(string userId)
         => this.data.
             Specialists
@@ -20,7 +27,7 @@ namespace MediService.ASP.NET_Core.Services.Specialists
             .FirstOrDefault();
 
         public bool IsSpecialist(string userId)
-            => this.data
-            .Specialists.Any(x => x.UserId == userId);
+        => this.data
+        .Specialists.Any(x => x.UserId == userId);
     }
 }
