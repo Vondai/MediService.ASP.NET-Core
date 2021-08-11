@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Models.Subscriptions;
+using MediService.ASP.NET_Core.Services.Appointments;
+using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 
 using static MediService.ASP.NET_Core.WebConstants.Cache;
-using MediService.ASP.NET_Core.Services.Appointments;
-using MediService.ASP.NET_Core.Services.Specialists;
 
 namespace MediService.ASP.NET_Core.Controllers
 {

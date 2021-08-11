@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Models.Appointments;
-using MediService.ASP.NET_Core.Models.Services;
-using MediService.ASP.NET_Core.Data.Models;
+using MediService.ASP.NET_Core.Services.Accounts;
+using MediService.ASP.NET_Core.Services.Appointments;
+using MediService.ASP.NET_Core.Services.MedicalServices;
 using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
-using MediService.ASP.NET_Core.Services.Appointments;
-using MediService.ASP.NET_Core.Services.Accounts;
-using MediService.ASP.NET_Core.Services.MedicalServices;
-using System.Threading.Tasks;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
     [Authorize]
     public class AppointmentsController : Controller
     {
-        private readonly MediServiceDbContext data;
         private readonly ISpecialistService specialists;
         private readonly ISubscriptionService subscriptions;
         private readonly IAppointmentService appointments;
@@ -28,13 +22,11 @@ namespace MediService.ASP.NET_Core.Controllers
         private readonly IMedicalService medicalService;
 
         public AppointmentsController
-            (MediServiceDbContext data,
-            ISpecialistService specialists,
+            (ISpecialistService specialists,
             ISubscriptionService subscriptions,
             IAppointmentService appointments,
             IAccountService accounts, IMedicalService medicalService)
         {
-            this.data = data;
             this.specialists = specialists;
             this.subscriptions = subscriptions;
             this.appointments = appointments;
@@ -122,6 +114,11 @@ namespace MediService.ASP.NET_Core.Controllers
                 return View(model);
             }
             var specialistId = this.specialists.GetIdFromService(model.ServiceId);
+            if (specialistId == null)
+            {
+                TempData.Add("Error", "Service has no available specialists. Sorry for the inconvenience.");
+                return Redirect("/Home");
+            }
             await this.appointments.CreateAppointment
                 (model.AdditionalInfo,
                 model.ServiceId,
@@ -139,23 +136,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var specialistId = this.specialists.IdByUser(userId);
             //Archive appointments
             await this.appointments.ArchiveAppointments(userId, specialistId);
-            var appointments = this.data
-                .Appointments
-                .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
-                       && x.IsDone == false
-                       && x.IsCanceled == false)
-                .OrderBy(a => a.Date)
-                .Select(x => new AppointmentViewModel()
-                {
-                    Id = x.Id,
-                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy"),
-                    Time = x.Date.ToLocalTime().ToString("HH:mm"),
-                    ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
-                    Name = specialistId != null ?
-                                x.User.FullName :
-                                x.Specialist.User.FullName
-                })
-                .ToList();
+            var appointments = this.appointments.GetUserAppointments(userId, specialistId);
 
             return View(appointments);
         }
@@ -167,26 +148,8 @@ namespace MediService.ASP.NET_Core.Controllers
             {
                 return NotFound();
             }
-            var appointment = this.data
-                .Appointments
-                .Where(a => a.Id == id)
-                .Select(x => new AppointmentDetailsViewModel()
-                {
-                    Id = x.Id,
-                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy HH:MM"),
-                    AdditionalInfo = x.AdditionalInfo,
-                    Address = x.User.Addresses
-                    .Select(address => address.FullAddress)
-                    .FirstOrDefault(),
-                    City = x.User.Addresses.
-                    Select(address => address.City)
-                    .FirstOrDefault(),
-                    PatientName = x.User.FullName,
-                    Service = x.Service.Name,
-                    Email = x.User.Email,
-                    PhoneNumber = x.User.PhoneNumber
-                })
-                .FirstOrDefault();
+            //Get appointment details by id
+            var appointment = this.appointments.GetAppointmentDetails(id);
             if (appointment == null)
             {
                 return NotFound();
@@ -195,42 +158,38 @@ namespace MediService.ASP.NET_Core.Controllers
             return View(appointment);
         }
 
-        public IActionResult Finish(string id)
+        public async Task<IActionResult> Finish(string id)
         {
-            if (!this.specialists.IsSpecialist(User.Id()))
+            var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
+            if (!isSpecialist)
             {
                 return NotFound();
             }
-            var appointment = this.data
-                .Appointments
-                .FirstOrDefault(x => x.Id == id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
-            appointment.IsDone = true;
-            this.data.SaveChanges();
-            TempData.Add("Success", "Successfuly archived appointment.");
 
+            var isFinished = await this.appointments.FinishAppointment(id);
+            if (!isFinished)
+            {
+                TempData.Add("Error", "An error occurred while processing your request.");
+                return Redirect("/Home");
+            }
+            TempData.Add("Success", "Successfuly archived appointment.");
             return Redirect("/Appointments/Mine");
         }
 
-        public IActionResult Cancel(string id)
+        public async Task<IActionResult> Cancel(string id)
         {
-            if (this.specialists.IsSpecialist(User.Id()))
+            var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
+            if (isSpecialist)
             {
                 return NotFound();
             }
-            var appointment = this.data
-                .Appointments
-                .FirstOrDefault(x => x.Id == id);
-            if (appointment == null)
+            var isCanceled = await this.appointments.CancelAppointment(id);
+            if (!isCanceled)
             {
-                return NotFound();
+                TempData.Add("Error", "An error occurred while processing your request.");
+                return Redirect("/Home");
             }
-            appointment.IsCanceled = true;
-            this.data.SaveChanges();
-
+            TempData.Add("Success", "Successfuly canceled appointment.");
             return Redirect("/Appointments/Mine");
         }
 
@@ -238,22 +197,9 @@ namespace MediService.ASP.NET_Core.Controllers
         {
             var userId = this.User.Id();
             var specialistId = this.specialists.IdByUser(userId);
+            var archivedAppointments = this.appointments.GetArchivedAppointments(userId, specialistId);
 
-            var pastAppointments = this.data
-                .Appointments
-                .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
-                       && (x.IsDone == true
-                       || x.IsCanceled == true))
-                .OrderBy(x => x.Date)
-                .Select(x => new AppointmentPastViewModel()
-                {
-                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy"),
-                    ServiceName = x.Service.Name,
-                    Status = x.IsDone ? "Finished" : "Canceled"
-                })
-                .ToList();
-
-            return View(pastAppointments);
+            return View(archivedAppointments);
         }
     }
 }

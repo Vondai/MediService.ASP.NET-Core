@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Data.Models;
+using MediService.ASP.NET_Core.Models.Appointments;
 
 namespace MediService.ASP.NET_Core.Services.Appointments
 {
@@ -73,5 +75,91 @@ namespace MediService.ASP.NET_Core.Services.Appointments
             }
             return appointmentsToArchive.Count;
         }
+
+        public AppointmentDetailsViewModel GetAppointmentDetails(string appointmentId)
+            => this.data
+                .Appointments
+                .Where(a => a.Id == appointmentId)
+                .Select(x => new AppointmentDetailsViewModel()
+                {
+                    Id = x.Id,
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy HH:MM"),
+                    AdditionalInfo = x.AdditionalInfo,
+                    Address = x.User.Addresses
+                    .Select(address => address.FullAddress)
+                    .FirstOrDefault(),
+                    City = x.User.Addresses.
+                    Select(address => address.City)
+                    .FirstOrDefault(),
+                    PatientName = x.User.FullName,
+                    Service = x.Service.Name,
+                    Email = x.User.Email,
+                    PhoneNumber = x.User.PhoneNumber
+                })
+                .FirstOrDefault();
+
+        public async Task<bool> FinishAppointment(string appointmentId)
+        {
+            var appointment = this.GetAppointment(appointmentId);
+            if (appointment == null)
+            {
+                return false;
+            }
+            appointment.IsDone = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> CancelAppointment(string appointmentId)
+        {
+            var appointment = this.GetAppointment(appointmentId);
+            if (appointment == null)
+            {
+                return false;
+            }
+            appointment.IsCanceled = true;
+            await this.data.SaveChangesAsync();
+            return true;
+        }
+
+        public ICollection<AppointmentArchiveViewModel> GetArchivedAppointments(string userId, string specialistId = null)
+            => this.data
+                .Appointments
+                .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
+                       && (x.IsDone == true
+                       || x.IsCanceled == true))
+                .OrderBy(x => x.Date)
+                .Select(x => new AppointmentArchiveViewModel()
+                {
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy"),
+                    ServiceName = x.Service.Name,
+                    Status = x.IsDone ? "Finished" : "Canceled"
+                })
+                .ToList();
+
+        public ICollection<AppointmentViewModel> GetUserAppointments(string userId, string specialistId = null)
+            => this.data
+                .Appointments
+                .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)
+                       && x.IsDone == false
+                       && x.IsCanceled == false)
+                .OrderBy(a => a.Date)
+                .Select(x => new AppointmentViewModel()
+                {
+                    Id = x.Id,
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy"),
+                    Time = x.Date.ToLocalTime().ToString("HH:mm"),
+                    ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
+                    Name = specialistId != null ?
+                                x.User.FullName :
+                                x.Specialist.User.FullName
+                })
+                .ToList();
+
+        private Appointment GetAppointment(string appointmentId)
+            => this.data
+                .Appointments
+                .FirstOrDefault(x => x.Id == appointmentId);
     }
 }

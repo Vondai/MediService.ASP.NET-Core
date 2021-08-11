@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediService.ASP.NET_Core.Models.Appointments;
 
 namespace MediService.ASP.NET_Core.Services.Appointments
 {
@@ -10,6 +12,15 @@ namespace MediService.ASP.NET_Core.Services.Appointments
         bool CanMakeAppointmentFromDate(DateTime date);
 
         Task<int> ArchiveAppointments(string userId, string specialistId = null);
+
+        AppointmentDetailsViewModel GetAppointmentDetails(string appointmentId);
+
+        ICollection<AppointmentArchiveViewModel> GetArchivedAppointments(string userId, string specialistId = null);
+        ICollection<AppointmentViewModel> GetUserAppointments(string userId, string specialistId = null);
+
+        Task<bool> FinishAppointment(string appointmentId);
+
+        Task<bool> CancelAppointment(string appointmentId);
 
         Task<string> CreateAppointment
             (string additionalInfo,

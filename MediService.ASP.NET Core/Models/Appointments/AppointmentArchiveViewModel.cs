@@ -1,6 +1,6 @@
 ﻿namespace MediService.ASP.NET_Core.Models.Appointments
 {
-    public class AppointmentPastViewModel
+    public class AppointmentArchiveViewModel
     {
         public string Date { get; init; }
 
