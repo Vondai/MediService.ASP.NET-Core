@@ -14,6 +14,7 @@ using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 using MediService.ASP.NET_Core.Services.Appointments;
 using MediService.ASP.NET_Core.Services.Accounts;
+using MediService.ASP.NET_Core.Areas.Admin.Services;
 
 namespace MediService.ASP.NET_Core
 {
@@ -54,6 +55,7 @@ namespace MediService.ASP.NET_Core
             services.AddTransient<ISubscriptionService, SubscriptionService>();
             services.AddTransient<IAppointmentService, AppointmentService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

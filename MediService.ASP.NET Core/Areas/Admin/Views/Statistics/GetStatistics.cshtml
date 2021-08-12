@@ -1,0 +1,14 @@
+﻿@model StatisticsViewModel
+@{
+    ViewData["Title"] = "Add Specialist";
+}
+<h2 class="heading-margin text-center">Statistics</h2>
+
+<div class="jumbotron d-sm-table bg-warning">
+    <div class="row">
+        <h2 class="col-md-6 text-center">Total appointments: @Model.TotalAppointments</h2>
+        <h2 class="col-md-6 text-center">Finished appointments: @Model.FinishedAppointments</h2>
+        <h2 class="col-md-6 text-center">Canceled appointments: @Model.CanceledAppointments</h2>
+        <h2 class="col-md-6 text-center">Overall rating: @Model.OverallRating</h2>
+    </div>
+</div>

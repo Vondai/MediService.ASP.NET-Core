@@ -30,14 +30,6 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
             return subscription.Id;
         }
 
-        public int ActiveAppointments(string userId)
-            => this.data
-                .Appointments
-                .Where(a => a.User.Id == userId
-                    && a.IsCanceled == false
-                    && a.IsDone == false)
-                .Count();
-
         public ICollection<SubscriptionViewModel> GetAll()
             => this.data.Subscriptions
                 .OrderBy(x => x.Price)

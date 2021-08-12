@@ -61,7 +61,7 @@ namespace MediService.ASP.NET_Core.Controllers
             }
             //Archive appointments
             this.appointments.ArchiveAppointments(userId);
-            var activeAppointments = this.subscriptions.ActiveAppointments(userId);
+            var activeAppointments = this.appointments.GetUserAppointmetsCount(userId);
             if (activeAppointments > 0)
             {
                 TempData.Add("Error", "You have active appointments.");

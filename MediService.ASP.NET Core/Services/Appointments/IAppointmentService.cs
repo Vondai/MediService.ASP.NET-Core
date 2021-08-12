@@ -16,6 +16,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
         AppointmentDetailsViewModel GetAppointmentDetails(string appointmentId);
 
         ICollection<AppointmentArchiveViewModel> GetArchivedAppointments(string userId, string specialistId = null);
+
         ICollection<AppointmentViewModel> GetUserAppointments(string userId, string specialistId = null);
 
         Task<bool> FinishAppointment(string appointmentId);

@@ -10,7 +10,6 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
             string name,
             decimal price,
             int appointmentCount);
-        int ActiveAppointments(string userId);
 
         ICollection<SubscriptionViewModel> GetAll();
 
