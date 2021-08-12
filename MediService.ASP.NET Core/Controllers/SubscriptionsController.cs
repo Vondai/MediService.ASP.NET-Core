@@ -10,6 +10,8 @@ using MediService.ASP.NET_Core.Services.Appointments;
 using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 
+using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
+
 using static MediService.ASP.NET_Core.WebConstants.Cache;
 
 namespace MediService.ASP.NET_Core.Controllers
@@ -53,6 +55,12 @@ namespace MediService.ASP.NET_Core.Controllers
         public IActionResult Subscribe()
         {
             var userId = this.User.Id();
+            var isAdmin = this.User.IsInRole(AdminRoleName);
+            if (isAdmin)
+            {
+                TempData.Add("Error", "Admins cannot subscribe.");
+                return Redirect("/Home");
+            }
             var isSpecialist = this.specialists.IsSpecialist(userId);
             if (isSpecialist)
             {

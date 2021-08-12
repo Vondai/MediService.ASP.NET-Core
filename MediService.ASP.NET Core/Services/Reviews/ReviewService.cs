@@ -18,6 +18,11 @@ namespace MediService.ASP.NET_Core.Services.Reviews
             this.data = data;
         }
 
+        public bool HasReview(string userId)
+            => this.data
+            .Reviews
+            .Any(x => x.UserId == userId);
+
         public async Task<int> Create(string title, string description, int rating, string userId)
         {
             var review = new Review()

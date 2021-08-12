@@ -18,7 +18,16 @@ namespace MediService.ASP.NET_Core.Controllers
 
         [Authorize]
         public IActionResult Create()
-            => View(new CreateReviewFormModel());
+        {
+            var userId = this.User.Id();
+            var hasReview = this.reviews.HasReview(userId);
+            if (hasReview)
+            {
+                TempData.Add("Error", "Users may make one review only.");
+                return Redirect("/Home");
+            }
+            return View(new CreateReviewFormModel());
+        }
 
         [HttpPost]
         [Authorize]

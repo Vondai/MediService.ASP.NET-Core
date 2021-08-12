@@ -6,6 +6,8 @@ namespace MediService.ASP.NET_Core.Services.Reviews
 {
     public interface IReviewService
     {
+        bool HasReview(string userId);
+
         ICollection<ReviewViewModel> GetRecent();
 
         Task<int> Create(string title, string description, int rating, string userId);
