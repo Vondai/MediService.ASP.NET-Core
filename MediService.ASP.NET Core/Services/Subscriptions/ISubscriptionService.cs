@@ -1,5 +1,4 @@
-﻿using MediService.ASP.NET_Core.Data.Models;
-using MediService.ASP.NET_Core.Models.Subscriptions;
+﻿using MediService.ASP.NET_Core.Models.Subscriptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,6 +6,10 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
 {
     public interface ISubscriptionService
     {
+        Task<int> CreateSubscription(
+            string name,
+            decimal price,
+            int appointmentCount);
         int ActiveAppointments(string userId);
 
         ICollection<SubscriptionViewModel> GetAll();

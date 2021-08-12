@@ -11,6 +11,12 @@ namespace MediService.ASP.NET_Core.Services.Accounts
         public AccountService(MediServiceDbContext data)
             => this.data = data;
 
+        public string GetIdByUsername(string username)
+            => this.data.Users
+                .Where(u => u.UserName == username)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+
         public User CreateUser(
             string username, 
             string email, 

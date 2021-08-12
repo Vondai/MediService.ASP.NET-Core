@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediService.ASP.NET_Core.Data;
+using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Models.Subscriptions;
 
 namespace MediService.ASP.NET_Core.Services.Subscriptions
@@ -13,6 +14,20 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
         public SubscriptionService(MediServiceDbContext data)
         {
             this.data = data;
+        }
+
+        public async Task<int> CreateSubscription(string name, decimal price, int appointmentCount)
+        {
+            var subscription = new Subscription()
+            {
+                Name = name,
+                Price = price,
+                AppointmentCount = appointmentCount,
+            };
+            this.data.Subscriptions.Add(subscription);
+            await this.data.SaveChangesAsync();
+
+            return subscription.Id;
         }
 
         public int ActiveAppointments(string userId)

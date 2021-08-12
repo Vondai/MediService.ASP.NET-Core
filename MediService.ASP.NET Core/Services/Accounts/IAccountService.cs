@@ -4,6 +4,8 @@ namespace MediService.ASP.NET_Core.Services.Accounts
 {
     public interface IAccountService
     {
+        string GetIdByUsername(string username);
+
         string GetAddress(string userId);
 
         User CreateUser(
