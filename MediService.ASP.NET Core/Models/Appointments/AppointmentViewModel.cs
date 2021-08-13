@@ -10,6 +10,8 @@
 
         public string ServiceName { get; init; }
 
+        public bool CanCancel { get; init; }
+
         public string Name { get; init; }
     }
 }

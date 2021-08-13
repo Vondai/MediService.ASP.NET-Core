@@ -47,7 +47,10 @@
                         }
                         else
                         {
-                            <td><a class="btn btn-danger" href="/Appointments/Cancel?id=@appointment.Id">Cancel Appointment</a></td>
+                            @if (appointment.CanCancel)
+                            {
+                                <td><a class="btn btn-danger" href="/Appointments/Cancel?id=@appointment.Id">Cancel Appointment</a></td>
+                            }
                         }
                     </tr>
                 }

@@ -177,7 +177,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
             if (isSpecialist)
             {
-                return NotFound();
+                return BadRequest();
             }
             var isCanceled = await this.appointments.CancelAppointment(id);
             if (!isCanceled)

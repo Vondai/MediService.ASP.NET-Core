@@ -112,7 +112,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
         public async Task<bool> CancelAppointment(string appointmentId)
         {
             var appointment = this.GetAppointment(appointmentId);
-            if (appointment == null)
+            if (appointment == null || !CanCancel(appointment.Date))
             {
                 return false;
             }
@@ -151,7 +151,8 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                     ServiceName = this.data.Services.Where(s => s.Id == x.ServiceId).Select(x => x.Name).FirstOrDefault(),
                     Name = specialistId != null ?
                                 x.User.FullName :
-                                x.Specialist.User.FullName
+                                x.Specialist.User.FullName,
+                    CanCancel = CanCancel(x.Date)
                 })
                 .ToList();
 
@@ -159,5 +160,8 @@ namespace MediService.ASP.NET_Core.Services.Appointments
             => this.data
                 .Appointments
                 .FirstOrDefault(x => x.Id == appointmentId);
+
+        private static bool CanCancel(DateTime date)
+            => DateTime.Now.AddMinutes(60) <= date.ToLocalTime();
     }
 }
