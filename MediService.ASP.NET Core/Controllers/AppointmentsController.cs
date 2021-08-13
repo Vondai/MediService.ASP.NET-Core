@@ -34,7 +34,7 @@ namespace MediService.ASP.NET_Core.Controllers
             this.medicalService = medicalService;
         }
 
-        public async Task<IActionResult> Make()
+        public IActionResult Make()
         {
             var userId = this.User.Id();
 
@@ -52,8 +52,6 @@ namespace MediService.ASP.NET_Core.Controllers
                 this.TempData.Add("Error", "Only subscribers can make appointments.");
                 return Redirect("/Subscriptions/All");
             }
-            //Archive appointments
-            await this.appointments.ArchiveAppointments(userId);
             //Cannot make an appointment if user has reached the maximum count of available appointments.
             var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
             var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
@@ -130,12 +128,10 @@ namespace MediService.ASP.NET_Core.Controllers
             return Redirect("/Appointments/Mine");
         }
 
-        public async Task<IActionResult> Mine()
+        public IActionResult Mine()
         {
             var userId = this.User.Id();
             var specialistId = this.specialists.IdByUser(userId);
-            //Archive appointments
-            await this.appointments.ArchiveAppointments(userId, specialistId);
             var appointments = this.appointments.GetUserAppointments(userId, specialistId);
 
             return View(appointments);

@@ -55,15 +55,13 @@ namespace MediService.ASP.NET_Core.Services.Appointments
             return appointment.Id;
         }
 
-        public async Task<int> ArchiveAppointments(string userId, string specialistId = null)
+        public async Task<int> ArchiveAppointments()
         {
             var dateNowUniversal = DateTime.Now.ToUniversalTime();
             var appointmentsToArchive = this.data.Appointments
-                .Where(a =>
-                (specialistId != null ? a.SpecialistId == specialistId : a.UserId == userId)
-                && dateNowUniversal >= a.Date
-                && a.IsDone == false
-                && a.IsCanceled == false)
+                .Where(a => dateNowUniversal >= a.Date
+                 && a.IsDone == false
+                 && a.IsCanceled == false)
                 .ToList();
             if (appointmentsToArchive.Any())
             {

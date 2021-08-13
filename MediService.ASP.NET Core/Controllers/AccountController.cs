@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Data.Models;
 using MediService.ASP.NET_Core.Models.Users;
-using MediService.ASP.NET_Core.Services.Appointments;
-using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Accounts;
 
 namespace MediService.ASP.NET_Core.Controllers
@@ -15,20 +13,14 @@ namespace MediService.ASP.NET_Core.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IAccountService accounts;
-        private readonly IAppointmentService appointments;
-        private readonly ISpecialistService specialists;
 
         public AccountController
             (UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IAppointmentService appointments,
-            ISpecialistService specialists,
             IAccountService accounts)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.appointments = appointments;
-            this.specialists = specialists;
             this.accounts = accounts;
         }
         [AllowAnonymous]
@@ -83,14 +75,6 @@ namespace MediService.ASP.NET_Core.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 return View(model);
-            }
-            var user = await this.userManager.FindByNameAsync(model.Username);
-            var userId = user.Id;
-            var specialistId = this.specialists.IdByUser(userId);
-            var archivedAppointments = await this.appointments.ArchiveAppointments(userId, specialistId);
-            if (archivedAppointments > 0)
-            {
-                TempData.Add("Success", $"{archivedAppointments} appointment/s archived.");
             }
             if (returnUrl != null)
             {
