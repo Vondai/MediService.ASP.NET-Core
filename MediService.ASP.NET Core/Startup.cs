@@ -15,6 +15,7 @@ using MediService.ASP.NET_Core.Services.Subscriptions;
 using MediService.ASP.NET_Core.Services.Appointments;
 using MediService.ASP.NET_Core.Services.Accounts;
 using MediService.ASP.NET_Core.Areas.Admin.Services;
+using MediService.ASP.NET_Core.Services.Background;
 
 namespace MediService.ASP.NET_Core
 {
@@ -49,6 +50,8 @@ namespace MediService.ASP.NET_Core
                 options.Lockout.AllowedForNewUsers = false;
             });
             services.AddMemoryCache();
+            services.AddHostedService<ArchiveService>();
+            services.AddSingleton<IWorker, Worker>();
             services.AddTransient<ISpecialistService, SpecialistService>();
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IMedicalService, MedicalService>();

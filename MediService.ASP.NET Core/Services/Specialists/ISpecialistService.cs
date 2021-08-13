@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using MediService.ASP.NET_Core.Data.Models;
+using MediService.ASP.NET_Core.Models.Specialists;
 
 namespace MediService.ASP.NET_Core.Services.Specialists
 {
     public interface ISpecialistService
     {
+        ICollection<SpecialistViewModel> GetAll();
         Task<string> CreateSpecialist(
             string userId,
             string username,

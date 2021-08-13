@@ -11,7 +11,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 
         bool CanMakeAppointmentFromDate(DateTime date);
 
-        Task<int> ArchiveAppointments(string userId, string specialistId = null);
+        Task<int> ArchiveAppointments();
 
         AppointmentDetailsViewModel GetAppointmentDetails(string appointmentId);
 

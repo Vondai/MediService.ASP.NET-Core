@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using MediService.ASP.NET_Core.Data;
 using MediService.ASP.NET_Core.Data.Models;
+using System.Collections.Generic;
+using MediService.ASP.NET_Core.Models.Specialists;
 
 namespace MediService.ASP.NET_Core.Services.Specialists
 {
@@ -15,6 +17,20 @@ namespace MediService.ASP.NET_Core.Services.Specialists
         {
             this.data = data;
         }
+
+        public ICollection<SpecialistViewModel> GetAll()
+            => this.data
+                .Specialists
+                .OrderBy(s => s.User.FullName)
+                .Select(s => new SpecialistViewModel
+                {
+                    FullName = s.User.FullName,
+                    Description = s.Description,
+                    ImageUrl = s.ImageUrl,
+                    Services = s.Services.Select(x => x.Name)
+                     .ToArray()
+                })
+                .ToList();
 
         public async Task<string> CreateSpecialist(
             string userId,
