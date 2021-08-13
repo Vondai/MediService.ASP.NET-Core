@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediService.ASP.NET Core", "MediService.ASP.NET Core\MediService.ASP.NET Core.csproj", "{A07C3758-DD2E-4A57-95A4-C2D9C911B5FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediService.Test", "MediService.Test\MediService.Test.csproj", "{D423521C-2627-4125-BE32-A8AA9A49D39B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A07C3758-DD2E-4A57-95A4-C2D9C911B5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A07C3758-DD2E-4A57-95A4-C2D9C911B5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A07C3758-DD2E-4A57-95A4-C2D9C911B5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D423521C-2627-4125-BE32-A8AA9A49D39B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D423521C-2627-4125-BE32-A8AA9A49D39B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D423521C-2627-4125-BE32-A8AA9A49D39B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D423521C-2627-4125-BE32-A8AA9A49D39B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
