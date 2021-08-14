@@ -7,16 +7,16 @@
 }
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Our Subscription Plans</h1>
-    <p class="lead">For only $@cheapestSub you may choose @appointmentCount appointments with our medical specialists. Click <a href="/Services/All">services</a> to learn more.</p>
+    <h1 class="display-4 text-warning font-weight-bold">Our Subscription Plans</h1>
+    <h3 class=" font-weight-bolder text-warning">For only $@cheapestSub you may choose @appointmentCount appointments with our medical specialists. Click <a href="/Services/All" class="text-primary">services</a> to learn more.</h3>
 </div>
 <div class="container">
     <div class="card-deck mb-3 text-center">
         @foreach (var subsciption in Model)
         {
-            <div class="card mb-4 box-shadow">
+            <div class="card mb-4 box-shadow border border-warning">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">@subsciption.Name</h4>
+                    <h4 class="my-0 font-weight-normal font-weight-bold font-italic">@subsciption.Name</h4>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">$@subsciption.Price <small class="text-muted">/ mo</small></h1>
@@ -24,7 +24,7 @@
                         <li>Send messages to our Specialists</li>
                         <li>Number of available appointments: @subsciption.AppointmentCount</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-primary" onclick="redirect()">Subscribe now</button>
+                    <button type="button" class="btn btn-lg btn-block btn-warning" onclick="redirect()">Subscribe now</button>
                 </div>
             </div>
         }

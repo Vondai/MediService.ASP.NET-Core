@@ -5,40 +5,40 @@
 }
 
 <div class="container">
-    <div class="card col-sm-12 offset-lg-2 col-lg-8 bg-warning">
+    <h2 class="heading-margin text-center text-warning font-weight-bolder">Appointment Details</h2>
+    <div class="card col-sm-12 offset-lg-2 col-lg-8 bg-light border border-warning">
         <article class="card-body p-5">
-            <h2 class="text-center">Appointment Details</h2>
             <dl class="param text-center">
-                <dt>Date</dt>
-                <dd>@Model.Date</dd>
+                <dt class="text-warning font-weight-bolder">Date</dt>
+                <dd class="font-weight-bolder">@Model.Date</dd>
             </dl>
             <dl class="param text-center">
-                <dt>Patient Name</dt>
-                <dd>@Model.PatientName</dd>
+                <dt class="text-warning font-weight-bolder">Patient Name</dt>
+                <dd class="font-weight-bolder">@Model.PatientName</dd>
             </dl>
             <dl class="param text-center">
-                <dt>Full Address</dt>
-                <dd>@Model.Address</dd>
+                <dt class="text-warning font-weight-bolder">Full Address</dt>
+                <dd class="font-weight-bolder">@Model.Address</dd>
             </dl>
             <dl class="param text-center">
-                <dt>City</dt>
-                <dd>@Model.City</dd>
+                <dt class="text-warning font-weight-bolder">City</dt>
+                <dd class="font-weight-bolder">@Model.City</dd>
             </dl>
             <dl class="param text-center">
-                <dt>Email</dt>
-                <dd>@Model.Email</dd>
+                <dt class="text-warning font-weight-bolder">Email</dt>
+                <dd class="font-weight-bolder">@Model.Email</dd>
             </dl>
             <dl class="param text-center">
-                <dt>Phone number</dt>
-                <dd>@Model.PhoneNumber</dd>
+                <dt class="text-warning font-weight-bolder">Phone number</dt>
+                <dd class="font-weight-bolder">@Model.PhoneNumber</dd>
             </dl>
             <dl class="param text-center">
-                <dt>Service</dt>
-                <dd>@Model.Service</dd>
+                <dt class="text-warning font-weight-bolder">Service</dt>
+                <dd class="font-weight-bolder">@Model.Service</dd>
             </dl>
             <dl class="item-property text-center">
-                <dt>Additional information</dt>
-                <dd>
+                <dt class="text-warning font-weight-bolder">Additional information</dt>
+                <dd class="font-weight-bolder">
                     @if (Model.AdditionalInfo != null && Model.AdditionalInfo.Length > 0)
                     {
                         <p>
@@ -54,8 +54,8 @@
                 </dd>
             </dl>
             <hr>
-            <a href="/Appointments/Finish?id=@Model.Id" class="btn btn-lg btn-success text-center">Finish appointment </a>
-            <a href="/Appointments/Mine" class="btn btn-lg btn-outline-primary text-center">Back </a>
+            <a href="/Appointments/Finish?id=@Model.Id" class="btn btn-lg btn-success text-center">Finish appointment</a>
+            <a href="/Appointments/Mine" class="btn btn-lg btn-warning text-center">Back</a>
         </article>
     </div>
 </div>

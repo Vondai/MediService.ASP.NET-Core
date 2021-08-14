@@ -5,50 +5,50 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <h2 class="heading-margin text-center">Register</h2>
+        <h2 class="m-3 text-center font-weight-bold text-warning">Register</h2>
         <div class="alert alert-danger" asp-validation-summary="ModelOnly"></div>
         <form method="post">
             <div class="form-group">
-                <label asp-for="Username"></label>
+                <label class="text-warning" asp-for="Username"></label>
                 <input type="text" class="form-control" placeholder="Username" asp-for="Username" autofocus>
-                <span asp-validation-for="Username"></span>
+                <span class="text-danger" asp-validation-for="Username"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password"></label>
+                <label class="text-warning" asp-for="Password"></label>
                 <input type="password" class="form-control" placeholder="Password" asp-for="Password">
-                <span asp-validation-for="Password"></span>
+                <span class="text-danger" asp-validation-for="Password"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
+                <label class="text-warning" asp-for="ConfirmPassword"></label>
                 <input type="password" class="form-control" placeholder="Confirm Password" asp-for="ConfirmPassword">
-                <span asp-validation-for="ConfirmPassword"></span>
+                <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email"></label>
+                <label class="text-warning" asp-for="Email"></label>
                 <input type="email" class="form-control" placeholder="example@example.com" asp-for="Email">
-                <span asp-validation-for="Email"></span>
+                <span class="text-danger" asp-validation-for="Email"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FullName"></label>
+                <label class="text-warning" asp-for="FullName"></label>
                 <input type="text" class="form-control" placeholder="ex. John Smith" asp-for="FullName">
-                <span asp-validation-for="FullName"></span>
+                <span class="text-danger" asp-validation-for="FullName"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone"></label>
+                <label class="text-warning" asp-for="Phone"></label>
                 <input type="text" class="form-control" placeholder="0123456789" asp-for="Phone">
-                <span asp-validation-for="Phone"></span>
+                <span class="text-danger" asp-validation-for="Phone"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Address"></label>
+                <label class="text-warning" asp-for="Address"></label>
                 <input type="text" class="form-control" placeholder="10 example str." asp-for="Address">
-                <span asp-validation-for="Address"></span>
+                <span class="text-danger" asp-validation-for="Address"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City"></label>
+                <label class="text-warning" asp-for="City"></label>
                 <input type="text" class="form-control" readonly value="Sofia" asp-for="City">
-                <span asp-validation-for="City"></span>
+                <span class="text-danger" asp-validation-for="City"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-warning">Register</button>
         </form>
 
     </div>

@@ -10,14 +10,14 @@
 }
 
 <div class="container">
-    <h2 class="heading-margin text-center">My appointments</h2>
+    <h2 class="heading-margin text-center text-warning font-weight-bolder">My appointments</h2>
     @if (!Model.Any())
     {
-        <h3 class="text-center">You do not have any active appointments.</h3>
+        <h2 class="text-center text-primary">You do not have any active appointments.</h2>
     }
     else
     {
-        <table class="table table-info col-sm-12 offset-lg-2 col-lg-8 offset-xl-2 col-xl-8">
+        <table class="table table-primary table-bordered col-sm-12 offset-lg-2 col-lg-8 offset-xl-2 col-xl-8">
             <thead>
                 <tr>
                     <th scope="col">Date</th>
@@ -31,6 +31,7 @@
                     {
                         <th scope="col">Specialist name</th>
                     }
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +44,7 @@
                         <td>@appointment.Name</td>
                         @if (isSpecialist)
                         {
-                            <td><a class="btn btn-primary" href="/Appointments/Details?id=@appointment.Id">View more</a></td>
+                            <td><a class="btn btn-warning" href="/Appointments/Details?id=@appointment.Id">View more</a></td>
                         }
                         else
                         {
@@ -57,6 +58,7 @@
             </tbody>
         </table>
     }
-    <a class="btn btn-primary" href="/Appointments/Archive">My past appointments</a>
+    <p class="font-weight-bolder">Note: <span class="text-warning">Appointments due in an hour can not be canceled.</span></p>
+    <a class="btn btn-warning" href="/Appointments/Archive">My past appointments</a>
 </div>
 

@@ -15,7 +15,7 @@ using MediService.ASP.NET_Core.Services.Subscriptions;
 using MediService.ASP.NET_Core.Services.Appointments;
 using MediService.ASP.NET_Core.Services.Accounts;
 using MediService.ASP.NET_Core.Areas.Admin.Services;
-using MediService.ASP.NET_Core.Services.Background;
+using MediService.ASP.NET_Core.Services.Hosting;
 
 namespace MediService.ASP.NET_Core
 {

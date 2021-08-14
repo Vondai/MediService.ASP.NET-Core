@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace MediService.ASP.NET_Core.Services.Background
+namespace MediService.ASP.NET_Core.Services.Hosting
 {
     public interface IWorker
     {

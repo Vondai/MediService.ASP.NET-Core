@@ -2,13 +2,13 @@
 @{
     ViewData["Title"] = "Statistics";
 }
-<h2 class="heading-margin text-center">Statistics</h2>
+<h2 class="heading-margin text-center text-warning font-weight-bolder">Statistics</h2>
 
-<div class="jumbotron d-sm-table bg-warning">
+<div class="jumbotron d-sm-table bg-white border border-warning">
     <div class="row">
-        <h2 class="col-md-6 text-center">Total appointments: @Model.TotalAppointments</h2>
-        <h2 class="col-md-6 text-center">Finished appointments: @Model.FinishedAppointments</h2>
-        <h2 class="col-md-6 text-center">Canceled appointments: @Model.CanceledAppointments</h2>
-        <h2 class="col-md-6 text-center">Overall rating: @Model.OverallRating</h2>
+        <h2 class="col-md-6 text-center text-warning">Total appointments: <span class="text-black-50">@Model.TotalAppointments</span></h2>
+        <h2 class="col-md-6 text-center text-warning">Finished appointments: <span class="text-success">@Model.FinishedAppointments</span></h2>
+        <h2 class="col-md-6 text-center text-warning">Canceled appointments: <span class="text-danger">@Model.CanceledAppointments</span></h2>
+        <h2 class="col-md-6 text-center text-warning">Overall rating: <span class="text-info">@Model.OverallRating</span></h2>
     </div>
 </div>

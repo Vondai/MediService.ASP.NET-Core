@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace MediService.ASP.NET_Core.Services.Background
+namespace MediService.ASP.NET_Core.Services.Hosting
 {
     public class ArchiveService : BackgroundService
     {

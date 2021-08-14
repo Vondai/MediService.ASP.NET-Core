@@ -8,7 +8,7 @@ a.navbar-brand {
 }
 
 header {
-    background-color: beige;
+    background-color: azure;
 }
 
 /* Provide sufficient contrast against white background */
@@ -82,7 +82,7 @@ body {
     bottom: 0;
     width: 100%;
     white-space: nowrap;
-    background-color: beige;
+    background-color: azure;
     line-height: 40px; /* Vertically center the text there */
 }
 
@@ -103,7 +103,7 @@ body {
 }
 /*Background image*/
 .view {
-    background-image: url('../img/background.jpg');
+    background-image: url('../img/background2.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

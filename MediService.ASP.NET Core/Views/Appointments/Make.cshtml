@@ -4,27 +4,27 @@
 }
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <h2 class="heading-margin text-center">Make an appointment</h2>
-        <h4 class="text-center">You have @Model.AppointmentsLeft appointment/s left.</h4>
+        <h2 class="heading-margin text-center text-warning font-weight-bolder">Make an appointment</h2>
+        <h3 class="text-center text-warning">You have <span class="text-danger">@Model.AppointmentsLeft</span> appointment/s left.</h3>
         <div class="alert alert-danger" asp-validation-summary="ModelOnly"></div>
         <form method="post">
             <div class="form-group">
-                <label asp-for="Address"></label>
+                <label class="text-warning" asp-for="Address"></label>
                 <input type="text" class="form-control" value="@Model.Address" readonly asp-for="Address">
-                <span asp-validation-for="Address"></span>
+                <span class="text-danger" asp-validation-for="Address"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AdditionalInfo"></label>
+                <label class="text-warning" asp-for="AdditionalInfo"></label>
                 <textarea type="text" class="form-control" style="resize: none" rows="4" cols="50" asp-for="AdditionalInfo"></textarea>
-                <span asp-validation-for="AdditionalInfo"></span>
+                <span class="text-danger" asp-validation-for="AdditionalInfo"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Date"></label>
+                <label class="text-warning" asp-for="Date"></label>
                 <input type="datetime-local" class="form-control" asp-for="Date">
-                <span asp-validation-for="Date"></span>
+                <span class="text-danger" asp-validation-for="Date"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ServiceId"></label>
+                <label class="text-warning" asp-for="ServiceId"></label>
                 <select asp-for="ServiceId" class="form-control">
                     <option value="" selected disabled hidden>Select a medical service</option>
                     @foreach (var service in Model.Services)
@@ -32,9 +32,9 @@
                         <option value="@service.Id">@service.Name</option>
                     }
                 </select>
-                <span asp-validation-for="ServiceId"></span>
+                <span class="text-danger" asp-validation-for="ServiceId"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Make appointment</button>
+            <button type="submit" class="btn btn-warning">Make appointment</button>
         </form>
     </div>
 </div>

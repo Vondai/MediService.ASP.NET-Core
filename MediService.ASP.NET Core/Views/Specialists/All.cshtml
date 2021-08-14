@@ -4,17 +4,17 @@
 }
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Our Trained Specialists</h1>
+    <h1 class="display-4 text-warning font-weight-bold">Our Trained Specialists</h1>
 </div>
 
 <div class="card-deck row">
     @foreach (var specialist in Model)
     {
         <div class="col-sm-3">
-            <div class="card">
+            <div class="card border border-warning">
                 <img class="card-img-top" src="@specialist.ImageUrl" alt="@specialist.FullName">
                 <div class="card-body">
-                    <h5 class="card-title">@specialist.FullName</h5>
+                    <h4 class="card-title text-warning font-weight-bold font-italic"s>@specialist.FullName</h4>
                     <p class="card-text">@specialist.Description</p>
                 </div>
                 <div class="card-footer">
@@ -22,7 +22,7 @@
                         Services:
                         @foreach (var service in specialist.Services)
                         {
-                            <span>@service</span>
+                            <span class="text-warning font-weight-bold">@service</span>
                         }
                     </small>
                 </div>

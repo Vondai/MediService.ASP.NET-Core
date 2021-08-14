@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using MediService.ASP.NET_Core.Services.Appointments;
 
-namespace MediService.ASP.NET_Core.Services.Background
+namespace MediService.ASP.NET_Core.Services.Hosting
 {
     public class Worker : IWorker
     {
