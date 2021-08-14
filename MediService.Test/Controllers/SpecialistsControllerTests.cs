@@ -16,8 +16,8 @@ namespace MediService.Test.Controllers
         [Fact]
         public void AllShouldReturnViewWithAllSpecialists()
             => MyController<SpecialistsController>
-            .Instance(i => i
-            .WithData(TenSpecialists))
+            .Instance()
+            .WithData(TenSpecialists())
             .Calling(c => c.All())
             .ShouldHave()
             .MemoryCache(cache => cache

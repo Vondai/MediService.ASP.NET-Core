@@ -26,6 +26,10 @@ namespace MediService.Test.Controllers
                 .WithAbsoluteExpirationRelativeToNow(TimeSpan.FromDays(1))
                 .WithValueOfType<List<ServiceViewModel>>()))
             .AndAlso()
+            .ShouldHave()
+            .ActionAttributes(att => att
+                .AllowingAnonymousRequests())
+            .AndAlso()
             .ShouldReturn()
             .View(view => view
                 .WithModelOfType<List<ServiceViewModel>>()
