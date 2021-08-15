@@ -12,7 +12,6 @@ using MediService.ASP.NET_Core.Services.Subscriptions;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
-    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly ISpecialistService specialists;
@@ -34,6 +33,7 @@ namespace MediService.ASP.NET_Core.Controllers
             this.medicalService = medicalService;
         }
 
+        [Authorize]
         public IActionResult Make()
         {
             var userId = this.User.Id();
@@ -70,6 +70,7 @@ namespace MediService.ASP.NET_Core.Controllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Make(AppointmentFormModel model)
         {
@@ -128,6 +129,7 @@ namespace MediService.ASP.NET_Core.Controllers
             return Redirect("/Appointments/Mine");
         }
 
+        [Authorize]
         public IActionResult Mine()
         {
             var userId = this.User.Id();
@@ -137,6 +139,8 @@ namespace MediService.ASP.NET_Core.Controllers
             return View(appointments);
         }
 
+        [Authorize]
+        [HttpPost]
         public IActionResult Details(string id)
         {
             var isSpecialist = this.specialists.IsSpecialist(User.Id());
@@ -154,6 +158,8 @@ namespace MediService.ASP.NET_Core.Controllers
             return View(appointment);
         }
 
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Finish(string id)
         {
             var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
@@ -172,6 +178,8 @@ namespace MediService.ASP.NET_Core.Controllers
             return Redirect("/Appointments/Mine");
         }
 
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Cancel(string id)
         {
             var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
@@ -189,6 +197,7 @@ namespace MediService.ASP.NET_Core.Controllers
             return Redirect("/Appointments/Mine");
         }
 
+        [Authorize]
         public IActionResult Archive()
         {
             var userId = this.User.Id();

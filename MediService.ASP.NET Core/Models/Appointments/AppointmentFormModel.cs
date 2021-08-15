@@ -19,7 +19,7 @@ namespace MediService.ASP.NET_Core.Models.Appointments
 
         [Display(Name = "Medical service")]
         [Required(ErrorMessage = "Please choose a medical service")]
-        public int ServiceId { get; init; }
+        public int ServiceId { get; set; }
 
         public int AppointmentsLeft { get; set; }
 

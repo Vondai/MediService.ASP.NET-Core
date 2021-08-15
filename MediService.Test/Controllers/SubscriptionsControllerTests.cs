@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using MyTested.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Controllers;
 using MediService.ASP.NET_Core.Models.Subscriptions;
+using MediService.ASP.NET_Core.Data.Models;
 using FluentAssertions;
 using Xunit;
 
@@ -10,14 +13,12 @@ using static MediService.Test.Data.Subscriptions;
 using static MediService.ASP.NET_Core.WebConstants.Cache;
 using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
 using static MediService.Test.Data.Accounts;
-using MediService.ASP.NET_Core.Data.Models;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MediService.Test.Controllers
 {
     public class SubscriptionsControllerTests
     {
+        //TODO Add test for subscriber changing subscription
         [Fact]
         public void AllShouldReturnViewWithAllSubscriptions()
             => MyController<SubscriptionsController>

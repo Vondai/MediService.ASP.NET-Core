@@ -6,6 +6,9 @@ namespace MediService.Test.Data
 {
     public class Subscriptions
     {
+        private const string userId = "TestId";
+
+
         public static ICollection<Subscription> ThreeSubscriptions()
             => new List<Subscription>
                 {

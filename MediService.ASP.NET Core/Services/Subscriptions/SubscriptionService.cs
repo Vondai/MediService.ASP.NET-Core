@@ -48,8 +48,8 @@ namespace MediService.ASP.NET_Core.Services.Subscriptions
 
         public bool IsSubscriber(string userId)
             => this.data
-                .Users
-                .Any(u => u.Id == userId && u.SubscriptionId.HasValue);
+                .Subscriptions
+                .Any(s => s.Users.Any(u => u.Id == userId));
 
         public int GetSubscriptionAppointmentCount(string userId)
             => this.data
