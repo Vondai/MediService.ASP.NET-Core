@@ -1,6 +1,7 @@
-﻿using MediService.ASP.NET_Core.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MediService.ASP.NET_Core.Data.Models;
+using MediService.ASP.NET_Core.Models.Users;
 
 namespace MediService.Test.Data
 {
@@ -60,6 +61,34 @@ namespace MediService.Test.Data
             };
 
             return user;
+        }
+
+        public static UserRegisterFormModel ValidRegisterModel()
+        {
+            var model = new UserRegisterFormModel()
+            {
+                Address = "test str.",
+                City = "Sofia",
+                Email = "test@test.co",
+                FullName = "test test",
+                Username = "TestUsername",
+                Password = "123456",
+                ConfirmPassword = "123456",
+                Phone = "1234567890"
+            };
+
+            return model;
+        }
+
+        public static UserLoginFormModel ValidLoginModel()
+        {
+            var model = new UserLoginFormModel()
+            {
+                Username = "TestUsername",
+                Password = "123456",
+            };
+
+            return model;
         }
     }
 }

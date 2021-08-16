@@ -535,20 +535,26 @@ namespace MediService.Test.Controllers
         public void ArchiveShouldWorkCorrectly()
         {
             var user = ValidUser();
-            var appointments = new List<Appointment>()
+            //var appointments = new List<Appointment>()
+            //{
+            //    new Appointment() {IsCanceled = true, UserId = user.Id, Date = DateTime.Now.AddDays(2)},
+            //    new Appointment() {IsCanceled = true, UserId = user.Id, Date = DateTime.Now.AddDays(2)},
+            //    new Appointment() {IsCanceled = true, UserId = user.Id, Date = DateTime.Now.AddDays(2)},
+            //    new Appointment() {IsDone = true, UserId = user.Id, Date = DateTime.Now.AddDays(2)},
+            //    new Appointment() {IsDone = true, UserId = user.Id, Date = DateTime.Now.AddDays(2)},
+            //};
+            var appointment = new Appointment()
             {
-                new Appointment() {IsCanceled = true, UserId = user.Id},
-                new Appointment() {IsCanceled = true, UserId = user.Id},
-                new Appointment() {IsCanceled = true, UserId = user.Id},
-                new Appointment() {IsDone = true, UserId = user.Id},
-                new Appointment() {IsDone = true, UserId = user.Id},
+                IsCanceled = true,
+                UserId = user.Id,
+                Date = DateTime.Now.AddDays(2)
             };
 
             MyController<AppointmentsController>
                 .Instance()
+                .WithData(appointment)
                 .WithData(user)
-                .WithData(appointments)
-                .WithUser()
+                .WithUser(user.Id)
                 .Calling(c => c.Archive())
                 .ShouldHave()
                 .ActionAttributes(att => att

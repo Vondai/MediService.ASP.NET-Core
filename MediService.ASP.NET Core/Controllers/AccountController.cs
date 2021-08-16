@@ -68,7 +68,7 @@ namespace MediService.ASP.NET_Core.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(model);
             }
             var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
             if (!result.Succeeded)
