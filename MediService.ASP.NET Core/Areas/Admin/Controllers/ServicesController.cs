@@ -29,7 +29,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
             {
                 return View(model);
             }
-            await this.medicalServices.CreateService(model.Name, model.Description);
+            await this.medicalServices.CreateService(model.Name, model.Description, model.IsFree);
 
             TempData.Add(SuccessKey, "Successfuly added medical service.");
             return Redirect("/Services/All");
@@ -54,7 +54,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
                 return View(model);
             }
 
-            var edited = this.medicalServices.Edit(id, model.Name, model.Description);
+            var edited = this.medicalServices.Edit(id, model.Name, model.Description, model.IsFree);
 
             if (!edited)
             {

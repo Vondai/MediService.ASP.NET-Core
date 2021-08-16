@@ -26,7 +26,8 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                 .Appointments
                 .Where(a => a.UserId == userId
                     && a.IsCanceled == false
-                    && a.IsDone == false)
+                    && a.IsDone == false
+                    && a.Service.IsFree == false)
                 .Count();
 
         public async Task<string> CreateAppointment

@@ -134,7 +134,7 @@ namespace MediService.Test.Controllers
             .AndAlso()
             .ShouldReturn()
             .Redirect(r => r
-                .To<AppointmentsController>(c => c.Make()));
+                .To<AppointmentsController>(c => c.Make("")));
         }
 
         [Fact]

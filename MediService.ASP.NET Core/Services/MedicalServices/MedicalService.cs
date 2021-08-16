@@ -16,12 +16,13 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
             this.data = data;
         }
 
-        public async Task<int> CreateService(string name, string description)
+        public async Task<int> CreateService(string name, string description, bool isFree)
         {
             var service = new Service()
             {
                 Name = name,
-                Description = description
+                Description = description,
+                IsFree = isFree
             };
             await data.Services.AddAsync(service);
             await data.SaveChangesAsync();
@@ -31,6 +32,11 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
 
         public bool IsValidService(int serviceId)
             => this.data.Services
+                .Any(x => x.Id == serviceId);
+
+        public bool IsValidFreeService(int serviceId)
+            => this.data.Services
+                .Where(s => s.IsFree == true)
                 .Any(x => x.Id == serviceId);
 
         public Service GetServiceById(int serviceId)
@@ -44,11 +50,12 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
             .Select(x => new ServiceFormModel()
             {
                 Name = x.Name,
-                Description = x.Description
+                Description = x.Description,
+                IsFree = x.IsFree
             })
             .FirstOrDefault();
 
-        public bool Edit(int id, string name, string description)
+        public bool Edit(int id, string name, string description, bool isFree)
         {
             var medicalService = this.data.Services
                 .Find(id);
@@ -60,6 +67,7 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
 
             medicalService.Name = name;
             medicalService.Description = description;
+            medicalService.IsFree = isFree;
 
             this.data.SaveChanges();
 
@@ -79,6 +87,16 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
 
         public ICollection<ServiceViewFormModel> GetServices()
             => this.data.Services
+               .Select(x => new ServiceViewFormModel
+               {
+                   Id = x.Id,
+                   Name = x.Name
+               })
+               .ToList();
+
+        public ICollection<ServiceViewFormModel> GetFreeServices()
+            => this.data.Services
+               .Where(s => s.IsFree == true)
                .Select(x => new ServiceViewFormModel
                {
                    Id = x.Id,

@@ -22,6 +22,8 @@ namespace MediService.ASP.NET_Core.Data.Models
         [Required]
         public string Description { get; set; }
 
+        public bool IsFree { get; set; }
+
         public ICollection<Specialist> Specialists { get; init; }
 
         public ICollection<Appointment> Appointments { get; init; }

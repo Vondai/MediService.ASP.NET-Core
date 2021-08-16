@@ -24,7 +24,7 @@ namespace MediService.Test.Controllers
             .Instance()
             .WithData(UserWithSubscription())
             .WithUser()
-            .Calling(c => c.Make())
+            .Calling(c => c.Make(""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForAuthorizedRequests())
@@ -39,7 +39,7 @@ namespace MediService.Test.Controllers
             .Instance()
             .WithData(UserSpecilist())
             .WithUser()
-            .Calling(c => c.Make())
+            .Calling(c => c.Make(""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForAuthorizedRequests())
@@ -55,7 +55,7 @@ namespace MediService.Test.Controllers
             => MyController<AppointmentsController>
             .Instance()
             .WithUser()
-            .Calling(c => c.Make())
+            .Calling(c => c.Make(""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForAuthorizedRequests())
@@ -72,7 +72,7 @@ namespace MediService.Test.Controllers
             .Instance()
             .WithData(UserWithSubscriptionAndAppointments())
             .WithUser()
-            .Calling(c => c.Make())
+            .Calling(c => c.Make(""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForAuthorizedRequests())
@@ -105,7 +105,7 @@ namespace MediService.Test.Controllers
             .WithData(testSpecialist)
             .WithData(testUser)
             .WithUser()
-            .Calling(c => c.Make(testModel))
+            .Calling(c => c.Make(testModel, ""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForHttpMethod(HttpMethod.Post)
@@ -142,7 +142,7 @@ namespace MediService.Test.Controllers
             MyController<AppointmentsController>
             .Instance()
             .WithUser()
-            .Calling(c => c.Make(model))
+            .Calling(c => c.Make(model, ""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForHttpMethod(HttpMethod.Post)
@@ -170,7 +170,7 @@ namespace MediService.Test.Controllers
             .WithData(TenServices)
             .WithData(testUser)
             .WithUser()
-            .Calling(c => c.Make(model))
+            .Calling(c => c.Make(model, ""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForHttpMethod(HttpMethod.Post)
@@ -199,7 +199,7 @@ namespace MediService.Test.Controllers
             .WithData(TenServices)
             .WithData(testUser)
             .WithUser()
-            .Calling(c => c.Make(model))
+            .Calling(c => c.Make(model, ""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForHttpMethod(HttpMethod.Post)
@@ -228,7 +228,7 @@ namespace MediService.Test.Controllers
             .WithData(TenServices)
             .WithData(testUser)
             .WithUser()
-            .Calling(c => c.Make(model))
+            .Calling(c => c.Make(model, ""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForHttpMethod(HttpMethod.Post)
@@ -258,7 +258,7 @@ namespace MediService.Test.Controllers
             .WithData(TenServices)
             .WithData(testUser)
             .WithUser()
-            .Calling(c => c.Make(model))
+            .Calling(c => c.Make(model, ""))
             .ShouldHave()
             .ActionAttributes(att => att
                 .RestrictingForHttpMethod(HttpMethod.Post)

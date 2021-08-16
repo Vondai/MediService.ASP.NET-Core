@@ -15,5 +15,10 @@
             public const string AllServicesKey = nameof(AllServicesKey);
             public const string AllSubscriptionsKey = nameof(AllSubscriptionsKey);
         }
+
+        public class QueryInfo
+        {
+            public const string FreeAppointment = "free";
+        }
     }
 }

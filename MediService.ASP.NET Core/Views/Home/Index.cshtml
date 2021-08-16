@@ -1,4 +1,7 @@
 ﻿@model List<ReviewViewModel>
+
+@using static MediService.ASP.NET_Core.WebConstants.QueryInfo
+
 @{
     ViewData["Title"] = "Home";
 }
@@ -8,6 +11,10 @@
     <p class="lead">
         <a href="/Home/Faq" class="btn btn-lg btn-warning">Learn more</a>
     </p>
+    <a href="/Appointments/Make?info=@FreeAppointment" class="btn btn-primary col-lg-3">
+        <span class="spinner-grow spinner-grow-sm bg-warning" role="status" aria-hidden="true"></span>
+        <span class="visually-hidden font-weight-bolder">Try one of our free services!</span>
+    </a>
 </div>
 <div class="container">
     <h2 class="text-warning text-lg-center font-weight-bolder font-italic">Most recent reviews</h2>

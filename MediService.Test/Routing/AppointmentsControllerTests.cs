@@ -1,4 +1,5 @@
-﻿using MyTested.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using MyTested.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Controllers;
 using Xunit;
 
@@ -12,8 +13,9 @@ namespace MediService.Test.Routing
             .Configuration()
             .ShouldMap(request => request
                 .WithPath("/Appointments/Make")
+                .WithQueryString("?info=test")
                 .WithUser())
-            .To<AppointmentsController>(c => c.Make())
+            .To<AppointmentsController>(c => c.Make("test"))
             .Which()
             .ShouldHave()
             .ActionAttributes(att => att
@@ -25,9 +27,10 @@ namespace MediService.Test.Routing
             .Configuration()
             .ShouldMap(request => request
                 .WithPath("/Appointments/Make")
+                .WithQueryString("?info=test")
             .WithMethod(HttpMethod.Post)
                 .WithUser())
-            .To<AppointmentsController>(c => c.Make())
+            .To<AppointmentsController>(c => c.Make("test"))
             .Which()
             .ShouldHave()
             .ActionAttributes(att => att

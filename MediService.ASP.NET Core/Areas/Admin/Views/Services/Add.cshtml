@@ -17,6 +17,11 @@
                 <textarea class="form-control" rows="4" placeholder="Most common form of home care" asp-for="Description"></textarea>
                 <span class="text-danger" asp-validation-for="Description"></span>
             </div>
+            <div class="form-group">
+                <label class="text-warning" asp-for="IsFree"></label>
+                <input class="form-check-inline" asp-for="IsFree">
+                <span class="text-danger" asp-validation-for="IsFree"></span>
+            </div>
             <button type="submit" class="btn btn-warning">Add Service</button>
         </form>
     </div>

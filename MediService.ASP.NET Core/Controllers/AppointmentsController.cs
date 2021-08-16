@@ -11,6 +11,8 @@ using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 
 using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
+using static MediService.ASP.NET_Core.WebConstants.QueryInfo;
+using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -36,16 +38,30 @@ namespace MediService.ASP.NET_Core.Controllers
         }
 
         [Authorize]
-        public IActionResult Make()
+        public IActionResult Make(string info)
         {
+            var isAdmin = this.User.IsInRole(AdminRoleName);
+            if (isAdmin)
+            {
+                TempData.Add(ErrorKey, "Admins cannot make appointments.");
+                return Redirect("/Home");
+            }
             var userId = this.User.Id();
-
             //Cannot make appointments if user is a specialist.
             var isSpecialist = specialists.IsSpecialist(userId);
             if (isSpecialist)
             {
                 this.TempData.Add(ErrorKey, "Only non-specialists can make appointments.");
                 return Redirect("/Home");
+            }
+            //Check if the query string is for free appointment
+            if (info == FreeAppointment)
+            {
+                return View(new AppointmentFormModel()
+                {
+                    Address = this.accounts.GetAddress(userId),
+                    Services = this.medicalService.GetFreeServices(),
+                });
             }
             //Cannot make appointments if user is not a subscriber.
             var isSubscriber = this.subscriptions.IsSubscriber(userId);
@@ -74,7 +90,7 @@ namespace MediService.ASP.NET_Core.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Make(AppointmentFormModel model)
+        public async Task<IActionResult> Make(AppointmentFormModel model, string info)
         {
             var userId = this.User.Id();
             if (!ModelState.IsValid)
@@ -88,7 +104,15 @@ namespace MediService.ASP.NET_Core.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid Address.");
             }
             //Check for invalid medical service
-            var isValidService = this.medicalService.IsValidService(model.ServiceId);
+            bool isValidService;
+            if (info == FreeAppointment)
+            {
+                isValidService = this.medicalService.IsValidFreeService(model.ServiceId);
+            }
+            else
+            {
+                isValidService = this.medicalService.IsValidService(model.ServiceId);
+            }
             if (!isValidService)
             {
                 ModelState.AddModelError(string.Empty, "Invalid service.");
@@ -108,10 +132,17 @@ namespace MediService.ASP.NET_Core.Controllers
             }
             if (ModelState.ErrorCount > 0)
             {
-                model.Services = this.medicalService.GetServices();
-                var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
-                var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
-                model.AppointmentsLeft = subscriptionAppointmentCount - userAppointmentCount;
+                if (info == FreeAppointment)
+                {
+                    model.Services = this.medicalService.GetFreeServices();
+                }
+                else
+                {
+                    var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
+                    var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
+                    model.AppointmentsLeft = subscriptionAppointmentCount - userAppointmentCount;
+                    model.Services = this.medicalService.GetServices();
+                }
                 return View(model);
             }
             var specialistId = this.specialists.GetIdFromService(model.ServiceId);

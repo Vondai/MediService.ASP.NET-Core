@@ -33,6 +33,10 @@ namespace MediService.Test.Data
             {
                 IsCanceled = false,
                 IsDone = false,
+                Service = new Service()
+                {
+                    IsFree = false
+                }
             });
 
             return user;
@@ -45,7 +49,18 @@ namespace MediService.Test.Data
                 Id = userId,
                 Addresses = new List<Address>() { new Address() { FullAddress = testAddress } },
                 Subscription = new Subscription() { AppointmentCount = 1 },
-                Appointments = new List<Appointment> { new Appointment() { IsCanceled = false, IsDone = false } }
+                Appointments = new List<Appointment>
+                {
+                    new Appointment()
+                    {
+                        IsCanceled = false,
+                        IsDone = false,
+                        Service = new Service()
+                        {
+                            IsFree = false
+                        }
+                    }
+                }
             };
 
             return user;

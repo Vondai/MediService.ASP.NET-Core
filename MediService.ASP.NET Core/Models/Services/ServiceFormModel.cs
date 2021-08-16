@@ -6,7 +6,7 @@ namespace MediService.ASP.NET_Core.Models.Services
     public class ServiceFormModel
     {
         [Required]
-        [StringLength(ServiceNameMaxLength, 
+        [StringLength(ServiceNameMaxLength,
             MinimumLength = ServiceNameMinLength,
             ErrorMessage = "Name must be atleast {2} characters long.")]
         public string Name { get; init; }
@@ -17,5 +17,9 @@ namespace MediService.ASP.NET_Core.Models.Services
             MinimumLength = ServiceDescriptionMinLength,
             ErrorMessage = "Description must be atleast {2} characters long.")]
         public string Description { get; init; }
+
+        [Required]
+        [Display(Name = "Is the service free?")]
+        public bool IsFree { get; init; }
     }
 }

@@ -7,7 +7,7 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
 {
     public interface IMedicalService
     {
-        Task<int> CreateService(string name, string description);
+        Task<int> CreateService(string name, string description, bool isFree);
 
         Service GetServiceById(int serviceId);
 
@@ -15,10 +15,14 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
 
         bool IsValidService(int serviceId);
 
-        bool Edit(int id, string name, string description);
+        bool IsValidFreeService(int serviceId);
+
+        bool Edit(int id, string name, string description, bool isFree);
 
         ICollection<ServiceViewModel> GetAll();
 
         ICollection<ServiceViewFormModel> GetServices();
+
+        ICollection<ServiceViewFormModel> GetFreeServices();
     }
 }
