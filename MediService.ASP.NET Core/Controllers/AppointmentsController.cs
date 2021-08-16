@@ -181,12 +181,13 @@ namespace MediService.ASP.NET_Core.Controllers
         [Authorize]
         public async Task<IActionResult> Cancel(string id)
         {
-            var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
+            var userId = this.User.Id();
+            var isSpecialist = this.specialists.IsSpecialist(userId);
             if (isSpecialist)
             {
                 return BadRequest();
             }
-            var isCanceled = await this.appointments.CancelAppointment(id);
+            var isCanceled = await this.appointments.CancelAppointment(id, userId);
             if (!isCanceled)
             {
                 TempData.Add(ErrorKey, "An error occurred while processing your request.");

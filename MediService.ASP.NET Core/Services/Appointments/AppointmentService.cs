@@ -109,10 +109,12 @@ namespace MediService.ASP.NET_Core.Services.Appointments
             return true;
         }
 
-        public async Task<bool> CancelAppointment(string appointmentId)
+        public async Task<bool> CancelAppointment(string appointmentId, string userId)
         {
             var appointment = this.GetAppointment(appointmentId);
-            if (appointment == null || !CanCancel(appointment.Date))
+            if (appointment == null
+                || !CanCancelFromDate(appointment.Date)
+                || !CanCancelUser(appointment, userId))
             {
                 return false;
             }
@@ -152,7 +154,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                     Name = specialistId != null ?
                                 x.User.FullName :
                                 x.Specialist.User.FullName,
-                    CanCancel = CanCancel(x.Date)
+                    CanCancel = CanCancelFromDate(x.Date)
                 })
                 .ToList();
 
@@ -161,7 +163,10 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                 .Appointments
                 .FirstOrDefault(x => x.Id == appointmentId);
 
-        private static bool CanCancel(DateTime date)
+        private static bool CanCancelFromDate(DateTime date)
             => DateTime.Now.AddMinutes(60) <= date.ToLocalTime();
+
+        private static bool CanCancelUser(Appointment appointment, string userId)
+            => appointment.UserId == userId;
     }
 }

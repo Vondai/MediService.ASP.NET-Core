@@ -21,7 +21,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 
         Task<bool> FinishAppointment(string appointmentId);
 
-        Task<bool> CancelAppointment(string appointmentId);
+        Task<bool> CancelAppointment(string appointmentId, string userId);
 
         Task<string> CreateAppointment
             (string additionalInfo,
