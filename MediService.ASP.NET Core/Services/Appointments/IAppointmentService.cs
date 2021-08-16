@@ -19,7 +19,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 
         ICollection<AppointmentViewModel> GetUserAppointments(string userId, string specialistId = null);
 
-        Task<bool> FinishAppointment(string appointmentId);
+        Task<bool> FinishAppointment(string appointmentId, string specialistId);
 
         Task<bool> CancelAppointment(string appointmentId, string userId);
 

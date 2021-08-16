@@ -162,13 +162,14 @@ namespace MediService.ASP.NET_Core.Controllers
         [Authorize]
         public async Task<IActionResult> Finish(string id)
         {
-            var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
+            var userId = this.User.Id();
+            var isSpecialist = this.specialists.IsSpecialist(userId);
             if (!isSpecialist)
             {
                 return NotFound();
             }
-
-            var isFinished = await this.appointments.FinishAppointment(id);
+            var specialistId = this.specialists.IdByUser(userId);
+            var isFinished = await this.appointments.FinishAppointment(id, specialistId);
             if (!isFinished)
             {
                 TempData.Add(ErrorKey, "An error occurred while processing your request.");

@@ -96,10 +96,10 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                 })
                 .FirstOrDefault();
 
-        public async Task<bool> FinishAppointment(string appointmentId)
+        public async Task<bool> FinishAppointment(string appointmentId, string specialistId)
         {
             var appointment = this.GetAppointment(appointmentId);
-            if (appointment == null)
+            if (appointment == null || !CanFinishSpecialist(appointment, specialistId))
             {
                 return false;
             }
@@ -168,5 +168,8 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 
         private static bool CanCancelUser(Appointment appointment, string userId)
             => appointment.UserId == userId;
+
+        private static bool CanFinishSpecialist(Appointment appointment, string specialistId)
+            => appointment.SpecialistId == specialistId;
     }
 }
