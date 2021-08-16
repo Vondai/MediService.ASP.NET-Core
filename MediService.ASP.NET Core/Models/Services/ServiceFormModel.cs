@@ -3,7 +3,7 @@ using static MediService.ASP.NET_Core.Data.DataConstraints;
 
 namespace MediService.ASP.NET_Core.Models.Services
 {
-    public class ServiceAddFormModel
+    public class ServiceFormModel
     {
         [Required]
         [StringLength(ServiceNameMaxLength, 

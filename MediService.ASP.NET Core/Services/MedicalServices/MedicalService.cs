@@ -38,11 +38,40 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
                 .Where(s => s.Id == serviceId)
                 .FirstOrDefault();
 
+        public ServiceFormModel GetById(int serviceId)
+            => this.data.Services
+            .Where(s => s.Id == serviceId)
+            .Select(x => new ServiceFormModel()
+            {
+                Name = x.Name,
+                Description = x.Description
+            })
+            .FirstOrDefault();
+
+        public bool Edit(int id, string name, string description)
+        {
+            var medicalService = this.data.Services
+                .Find(id);
+
+            if (medicalService == null)
+            {
+                return false;
+            }
+
+            medicalService.Name = name;
+            medicalService.Description = description;
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
         public ICollection<ServiceViewModel> GetAll()
             => this.data.Services
                     .OrderBy(x => x.Name)
                     .Select(x => new ServiceViewModel()
                     {
+                        Id = x.Id,
                         Name = x.Name,
                         Description = x.Description,
                     })

@@ -1,7 +1,10 @@
 ﻿@model List<ServiceViewModel>
 
+@using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
+
 @{
     ViewData["Title"] = "Our Services";
+    var isAdmin = this.User.IsInRole(AdminRoleName);
 }
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4 text-warning font-weight-bold">Our Medical Services</h1>
@@ -16,6 +19,10 @@
                     <div class="card-body">
                         <h5 class="card-title text-warning font-italic">@service.Name</h5>
                         <p class="card-text">@service.Description</p>
+                        @if (isAdmin)
+                        {
+                            <a class="btn btn-warning" href="/Admin/Services/Edit?id=@service.Id">Edit</a>
+                        }
                     </div>
                 </div>
             </div>

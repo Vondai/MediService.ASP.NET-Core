@@ -11,7 +11,11 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
 
         Service GetServiceById(int serviceId);
 
+        ServiceFormModel GetById(int serviceId);
+
         bool IsValidService(int serviceId);
+
+        bool Edit(int id, string name, string description);
 
         ICollection<ServiceViewModel> GetAll();
 
