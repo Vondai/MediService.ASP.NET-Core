@@ -2,6 +2,12 @@
 {
     public class WebConstants
     {
+        public class GlobalMessage
+        {
+            public const string ErrorKey = "Error";
+            public const string SuccessKey = "Success";
+        }
+
         public class Cache
         {
             public const string RecentReviewsKey = nameof(RecentReviewsKey);

@@ -11,6 +11,7 @@ using Xunit;
 using static MediService.Test.Data.Accounts;
 using static MediService.Test.Data.Appointments;
 using static MediService.Test.Data.Services;
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
 
 namespace MediService.Test.Controllers
 {
@@ -126,7 +127,7 @@ namespace MediService.Test.Controllers
             .AndAlso()
             .ShouldHave()
             .TempData(td => td
-                .ContainingEntryWithKey("Success"))
+                .ContainingEntryWithKey(SuccessKey))
             .AndAlso()
             .ShouldReturn()
             .Redirect(r => r
@@ -266,7 +267,7 @@ namespace MediService.Test.Controllers
             .AndAlso()
             .ShouldHave()
             .TempData(td => td
-                .ContainingEntryWithKey("Error"))
+                .ContainingEntryWithKey(ErrorKey))
             .AndAlso()
             .ShouldReturn()
             .Redirect("/Home");
@@ -348,8 +349,7 @@ namespace MediService.Test.Controllers
                 .Calling(c => c.Finish(appId))
                 .ShouldHave()
                 .ActionAttributes(att => att
-                    .RestrictingForAuthorizedRequests()
-                    .RestrictingForHttpMethod(HttpMethod.Post))
+                    .RestrictingForAuthorizedRequests())
                 .AndAlso()
                 .ShouldHave()
                 .Data(d => d
@@ -358,7 +358,7 @@ namespace MediService.Test.Controllers
                 .AndAlso()
                 .ShouldHave()
                 .TempData(td => td
-                    .ContainingEntryWithKey("Success"))
+                    .ContainingEntryWithKey(SuccessKey))
                 .AndAlso()
                 .ShouldReturn()
                 .Redirect("/Appointments/Mine");
@@ -374,8 +374,7 @@ namespace MediService.Test.Controllers
                 .Calling(c => c.Finish(appId))
                 .ShouldHave()
                 .ActionAttributes(att => att
-                    .RestrictingForAuthorizedRequests()
-                    .RestrictingForHttpMethod(HttpMethod.Post))
+                    .RestrictingForAuthorizedRequests())
                 .AndAlso()
                 .ShouldReturn()
                 .NotFound();
@@ -394,12 +393,11 @@ namespace MediService.Test.Controllers
                 .Calling(c => c.Finish("InvaliId"))
                 .ShouldHave()
                 .ActionAttributes(att => att
-                    .RestrictingForAuthorizedRequests()
-                    .RestrictingForHttpMethod(HttpMethod.Post))
+                    .RestrictingForAuthorizedRequests())
                 .AndAlso()
                 .ShouldHave()
                 .TempData(td => td
-                    .ContainingEntryWithKey("Error"))
+                    .ContainingEntryWithKey(ErrorKey))
                 .AndAlso()
                 .ShouldReturn()
                 .Redirect("/Home");
@@ -419,12 +417,11 @@ namespace MediService.Test.Controllers
                 .Calling(c => c.Cancel(appId))
                 .ShouldHave()
                 .ActionAttributes(att => att
-                    .RestrictingForAuthorizedRequests()
-                    .RestrictingForHttpMethod(HttpMethod.Post))
+                    .RestrictingForAuthorizedRequests())
                 .AndAlso()
                 .ShouldHave()
                 .TempData(td => td
-                    .ContainingEntryWithKey("Success"))
+                    .ContainingEntryWithKey(SuccessKey))
                 .AndAlso()
                 .ShouldHave()
                 .Data(d => d
@@ -467,7 +464,7 @@ namespace MediService.Test.Controllers
                 .Calling(c => c.Cancel(appId))
                 .ShouldHave()
                 .TempData(td => td
-                    .ContainingEntryWithKey("Error"))
+                    .ContainingEntryWithKey(ErrorKey))
                 .AndAlso()
                 .ShouldHave()
                 .Data(d => d

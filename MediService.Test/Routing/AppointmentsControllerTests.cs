@@ -47,49 +47,46 @@ namespace MediService.Test.Routing
                 .RestrictingForAuthorizedRequests());
 
         [Fact]
-        public void PostDetailsShouldBeMapped()
+        public void DetailsShouldBeMapped()
             => MyPipeline
             .Configuration()
             .ShouldMap(request => request
                 .WithPath("/Appointments/Details")
                 .WithUser()
-                .WithMethod(HttpMethod.Post))
+                .WithMethod(HttpMethod.Get))
             .To<AppointmentsController>(c => c.Details(With.Value("test")))
             .Which()
             .ShouldHave()
             .ActionAttributes(att => att
-                .RestrictingForAuthorizedRequests()
-                .RestrictingForHttpMethod(HttpMethod.Post));
+                .RestrictingForAuthorizedRequests());
 
         [Fact]
-        public void PostFinishShouldBeMapped()
+        public void FinishShouldBeMapped()
             => MyPipeline
             .Configuration()
             .ShouldMap(request => request
                 .WithPath("/Appointments/Finish")
                 .WithUser()
-                .WithMethod(HttpMethod.Post))
+                .WithMethod(HttpMethod.Get))
             .To<AppointmentsController>(c => c.Finish(With.Value("test")))
             .Which()
             .ShouldHave()
             .ActionAttributes(att => att
-                .RestrictingForAuthorizedRequests()
-                .RestrictingForHttpMethod(HttpMethod.Post));
+                .RestrictingForAuthorizedRequests());
 
         [Fact]
-        public void PostCancelShouldBeMapped()
+        public void CancelShouldBeMapped()
             => MyPipeline
             .Configuration()
             .ShouldMap(request => request
                 .WithPath("/Appointments/Cancel")
                 .WithUser()
-                .WithMethod(HttpMethod.Post))
+            .WithMethod(HttpMethod.Get))
             .To<AppointmentsController>(c => c.Cancel(With.Value("test")))
             .Which()
             .ShouldHave()
             .ActionAttributes(att => att
-                .RestrictingForAuthorizedRequests()
-                .RestrictingForHttpMethod(HttpMethod.Post));
+                .RestrictingForAuthorizedRequests());
 
         [Fact]
         public void GetArchiveShouldBeMapped()

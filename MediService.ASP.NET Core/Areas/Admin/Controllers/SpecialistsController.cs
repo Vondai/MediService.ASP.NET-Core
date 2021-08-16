@@ -6,6 +6,8 @@ using MediService.ASP.NET_Core.Services.Accounts;
 using MediService.ASP.NET_Core.Services.MedicalServices;
 using MediService.ASP.NET_Core.Services.Specialists;
 
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
+
 namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
 {
     public class SpecialistsController : AdminController
@@ -53,7 +55,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
             }
             await this.specialists.CreateSpecialist(userId, model.Username, model.Description, specImage, mediService);
 
-            TempData.Add("Success", "Successfuly added specialist.");
+            TempData.Add(SuccessKey, "Successfuly added specialist.");
             return this.Redirect("/Specialists/All");
         }
     }

@@ -13,12 +13,12 @@ using static MediService.Test.Data.Subscriptions;
 using static MediService.ASP.NET_Core.WebConstants.Cache;
 using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
 using static MediService.Test.Data.Accounts;
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
 
 namespace MediService.Test.Controllers
 {
     public class SubscriptionsControllerTests
     {
-        //TODO Add test for subscriber changing subscription
         [Fact]
         public void AllShouldReturnViewWithAllSubscriptions()
             => MyController<SubscriptionsController>
@@ -130,7 +130,7 @@ namespace MediService.Test.Controllers
             .AndAlso()
             .ShouldHave()
             .TempData(td => td
-                .ContainingEntryWithKey("Success"))
+                .ContainingEntryWithKey(SuccessKey))
             .AndAlso()
             .ShouldReturn()
             .Redirect(r => r

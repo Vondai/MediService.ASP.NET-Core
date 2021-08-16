@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 using MediService.ASP.NET_Core.Models.Subscriptions;
 
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
+
 namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
 {
     public class SubscriptionsController : AdminController
@@ -30,7 +32,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
 
             await this.subscriptions.CreateSubscription(model.Name, price, model.AppointmentCount);
 
-            TempData.Add("Success", "Successfuly added subscription plan.");
+            TempData.Add(SuccessKey, "Successfuly added subscription plan.");
             return Redirect("/Subscriptions/All");
         }
     }

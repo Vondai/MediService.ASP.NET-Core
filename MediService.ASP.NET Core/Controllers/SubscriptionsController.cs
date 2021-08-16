@@ -11,8 +11,8 @@ using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 
 using static MediService.ASP.NET_Core.Areas.Admin.AdminConstants;
-
 using static MediService.ASP.NET_Core.WebConstants.Cache;
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
 
 namespace MediService.ASP.NET_Core.Controllers
 {
@@ -58,19 +58,19 @@ namespace MediService.ASP.NET_Core.Controllers
             var isAdmin = this.User.IsInRole(AdminRoleName);
             if (isAdmin)
             {
-                TempData.Add("Error", "Admins cannot subscribe.");
+                TempData.Add(ErrorKey, "Admins cannot subscribe.");
                 return Redirect("/Home");
             }
             var isSpecialist = this.specialists.IsSpecialist(userId);
             if (isSpecialist)
             {
-                TempData.Add("Error", "Specialists cannot subscribe.");
+                TempData.Add(ErrorKey, "Specialists cannot subscribe.");
                 return Redirect("/Home");
             }
             var activeAppointments = this.appointments.GetUserAppointmetsCount(userId);
             if (activeAppointments > 0)
             {
-                TempData.Add("Error", "You have active appointments.");
+                TempData.Add(ErrorKey, "You have active appointments.");
                 return Redirect("/Appointments/Mine");
             }
             return View(new SubscribeFormModel()
@@ -97,7 +97,7 @@ namespace MediService.ASP.NET_Core.Controllers
             }
             var userId = this.User.Id();
             await this.subscriptions.SubscribeUser(model.SubscriptionId, userId);
-            TempData.Add("Success", "Successful subscription.");
+            TempData.Add(SuccessKey, "Successful subscription.");
 
             return Redirect("/Appointments/Make");
         }

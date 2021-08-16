@@ -5,6 +5,7 @@ using MediService.ASP.NET_Core.Models.Services;
 using MediService.ASP.NET_Core.Services.MedicalServices;
 
 using static MediService.ASP.NET_Core.WebConstants.Cache;
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
 
 namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
 {
@@ -30,7 +31,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
             }
             await this.medicalServices.CreateService(model.Name, model.Description);
 
-            TempData.Add("Success", "Successfuly added medical service.");
+            TempData.Add(SuccessKey, "Successfuly added medical service.");
             return Redirect("/Services/All");
         }
 
@@ -61,7 +62,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
             }
             this.cache.Remove(AllServicesKey);
 
-            TempData.Add("Success", "Medical service successfuly edited.");
+            TempData.Add(SuccessKey, "Medical service successfuly edited.");
             return Redirect("/Services/All");
         }
     }

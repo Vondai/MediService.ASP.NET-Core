@@ -5,6 +5,8 @@ using MediService.ASP.NET_Core.Models.Reviews;
 using MediService.ASP.NET_Core.Infrastructure;
 using MediService.ASP.NET_Core.Services.Reviews;
 
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
+
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class ReviewsController : Controller
@@ -23,7 +25,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var hasReview = this.reviews.HasReview(userId);
             if (hasReview)
             {
-                TempData.Add("Error", "Users may make one review only.");
+                TempData.Add(ErrorKey, "Users may make one review only.");
                 return Redirect("/Home");
             }
             return View(new CreateReviewFormModel());
@@ -47,7 +49,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var userId = this.User.Id();
             await this.reviews.Create(model.Title, model.Description, model.Rating, userId);
 
-            TempData.Add("Success", "Thank you for the review!");
+            TempData.Add(SuccessKey, "Thank you for the review!");
             return Redirect("/Home");
         }
     }

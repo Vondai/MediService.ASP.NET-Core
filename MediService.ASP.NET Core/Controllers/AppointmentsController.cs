@@ -10,6 +10,8 @@ using MediService.ASP.NET_Core.Services.MedicalServices;
 using MediService.ASP.NET_Core.Services.Specialists;
 using MediService.ASP.NET_Core.Services.Subscriptions;
 
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
+
 namespace MediService.ASP.NET_Core.Controllers
 {
     public class AppointmentsController : Controller
@@ -42,14 +44,14 @@ namespace MediService.ASP.NET_Core.Controllers
             var isSpecialist = specialists.IsSpecialist(userId);
             if (isSpecialist)
             {
-                this.TempData.Add("Error", "Only non-specialists can make appointments.");
+                this.TempData.Add(ErrorKey, "Only non-specialists can make appointments.");
                 return Redirect("/Home");
             }
             //Cannot make appointments if user is not a subscriber.
             var isSubscriber = this.subscriptions.IsSubscriber(userId);
             if (!isSubscriber)
             {
-                this.TempData.Add("Error", "Only subscribers can make appointments.");
+                this.TempData.Add(ErrorKey, "Only subscribers can make appointments.");
                 return Redirect("/Subscriptions/All");
             }
             //Cannot make an appointment if user has reached the maximum count of available appointments.
@@ -57,7 +59,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
             if (userAppointmentCount == subscriptionAppointmentCount)
             {
-                this.TempData.Add("Error", "You have reached the maximum number of appointments for the current subscription plan.");
+                this.TempData.Add(ErrorKey, "You have reached the maximum number of appointments for the current subscription plan.");
                 return Redirect("/Appointments/Mine");
             }
             //Appointments left for the current subscription plan
@@ -115,7 +117,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var specialistId = this.specialists.GetIdFromService(model.ServiceId);
             if (specialistId == null)
             {
-                TempData.Add("Error", "Service has no available specialists. Sorry for the inconvenience.");
+                TempData.Add(ErrorKey, "Service has no available specialists. Sorry for the inconvenience.");
                 return Redirect("/Home");
             }
             await this.appointments.CreateAppointment
@@ -125,7 +127,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 date,
                 userId);
 
-            TempData.Add("Success", "Successful appointment.");
+            TempData.Add(SuccessKey, "Successful appointment.");
             return Redirect("/Appointments/Mine");
         }
 
@@ -140,7 +142,6 @@ namespace MediService.ASP.NET_Core.Controllers
         }
 
         [Authorize]
-        [HttpPost]
         public IActionResult Details(string id)
         {
             var isSpecialist = this.specialists.IsSpecialist(User.Id());
@@ -159,7 +160,6 @@ namespace MediService.ASP.NET_Core.Controllers
         }
 
         [Authorize]
-        [HttpPost]
         public async Task<IActionResult> Finish(string id)
         {
             var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
@@ -171,15 +171,14 @@ namespace MediService.ASP.NET_Core.Controllers
             var isFinished = await this.appointments.FinishAppointment(id);
             if (!isFinished)
             {
-                TempData.Add("Error", "An error occurred while processing your request.");
+                TempData.Add(ErrorKey, "An error occurred while processing your request.");
                 return Redirect("/Home");
             }
-            TempData.Add("Success", "Successfuly archived appointment.");
+            TempData.Add(SuccessKey, "Successfuly archived appointment.");
             return Redirect("/Appointments/Mine");
         }
 
         [Authorize]
-        [HttpPost]
         public async Task<IActionResult> Cancel(string id)
         {
             var isSpecialist = this.specialists.IsSpecialist(this.User.Id());
@@ -190,10 +189,10 @@ namespace MediService.ASP.NET_Core.Controllers
             var isCanceled = await this.appointments.CancelAppointment(id);
             if (!isCanceled)
             {
-                TempData.Add("Error", "An error occurred while processing your request.");
+                TempData.Add(ErrorKey, "An error occurred while processing your request.");
                 return Redirect("/Home");
             }
-            TempData.Add("Success", "Successfuly canceled appointment.");
+            TempData.Add(SuccessKey, "Successfuly canceled appointment.");
             return Redirect("/Appointments/Mine");
         }
 

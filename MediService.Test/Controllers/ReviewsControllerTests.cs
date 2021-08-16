@@ -7,6 +7,7 @@ using MediService.ASP.NET_Core.Models.Reviews;
 using Xunit;
 
 using static MediService.Test.Data.Reviews;
+using static MediService.ASP.NET_Core.WebConstants.GlobalMessage;
 
 namespace MediService.Test.Controllers
 {
@@ -72,7 +73,7 @@ namespace MediService.Test.Controllers
             .AndAlso()
             .ShouldHave()
             .TempData(td => td
-                .ContainingEntryWithKey("Success"))
+                .ContainingEntryWithKey(SuccessKey))
             .AndAlso()
             .ShouldReturn()
             .Redirect("/Home");
