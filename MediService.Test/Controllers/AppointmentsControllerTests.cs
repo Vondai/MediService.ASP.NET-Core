@@ -404,6 +404,31 @@ namespace MediService.Test.Controllers
         }
 
         [Fact]
+        public void FinishOtherSpecialistAppointmentShouldRedirectWithError()
+        {
+            var userSpecialist = UserSpecilist();
+            var appId = "testAppointmentId";
+            var appointment = new Appointment() { Id = appId, SpecialistId = "specialistId2" };
+
+            MyController<AppointmentsController>
+            .Instance()
+            .WithData(appointment)
+            .WithData(userSpecialist)
+            .WithUser(userSpecialist.UserId)
+            .Calling(c => c.Finish(appointment.Id))
+            .ShouldHave()
+            .ActionAttributes(att => att
+                .RestrictingForAuthorizedRequests())
+            .AndAlso()
+            .ShouldHave()
+            .TempData(td => td
+                .ContainingEntryWithKey(ErrorKey))
+            .AndAlso()
+            .ShouldReturn()
+            .Redirect("/Home");
+        }
+        //Cancel
+        [Fact]
         public void CancelShouldWorkCorrectly()
         {
             var user = ValidUser();
@@ -430,6 +455,36 @@ namespace MediService.Test.Controllers
                 .AndAlso()
                 .ShouldReturn()
                 .Redirect("/Appointments/Mine");
+        }
+
+        [Fact]
+        public void CancelOtherUsersAppointmentShouldRedirectWithError()
+        {
+            var user = ValidUser();
+            var appId = "testAppointmentId";
+            var appointment = new Appointment()
+            {
+                Id = appId,
+                UserId = "userId2",
+                Date = DateTime.Now.AddDays(10)
+            };
+
+            MyController<AppointmentsController>
+            .Instance()
+                .WithData(appointment)
+                .WithData(user)
+                .WithUser(user.Id)
+                .Calling(c => c.Cancel(appointment.Id))
+                .ShouldHave()
+                .ActionAttributes(att => att
+                    .RestrictingForAuthorizedRequests())
+                .AndAlso()
+                .ShouldHave()
+                .TempData(td => td
+                    .ContainingEntryWithKey(ErrorKey))
+                .AndAlso()
+                .ShouldReturn()
+                .Redirect("/Home");
         }
 
         [Fact]
