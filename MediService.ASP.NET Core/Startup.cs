@@ -50,8 +50,6 @@ namespace MediService.ASP.NET_Core
                 options.Lockout.AllowedForNewUsers = false;
             });
             services.AddMemoryCache();
-            services.AddHostedService<ArchiveService>();
-            services.AddSingleton<IWorker, Worker>();
             services.AddTransient<ISpecialistService, SpecialistService>();
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IMedicalService, MedicalService>();
@@ -59,6 +57,8 @@ namespace MediService.ASP.NET_Core
             services.AddTransient<IAppointmentService, AppointmentService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddSingleton<IWorker, Worker>();
+            //services.AddHostedService<ArchiveService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

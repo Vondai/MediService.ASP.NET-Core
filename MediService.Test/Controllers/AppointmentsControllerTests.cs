@@ -337,9 +337,9 @@ namespace MediService.Test.Controllers
         [Fact]
         public void FinishShouldWorkCorrectly()
         {
-            var appId = "testAppointmentId";
-            var appointment = new Appointment() { Id = appId };
             var userSpecialist = UserSpecilist();
+            var appId = "testAppointmentId";
+            var appointment = new Appointment() { Id = appId, SpecialistId = userSpecialist.Id };
 
             MyController<AppointmentsController>
                 .Instance()

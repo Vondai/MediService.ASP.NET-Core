@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MediService.ASP.NET_Core.Services.Hosting;
 
 namespace MediService.ASP.NET_Core
 {
@@ -13,6 +15,7 @@ namespace MediService.ASP.NET_Core
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
-                    webBuilder.UseStartup<Startup>());
+                    webBuilder.UseStartup<Startup>())
+                .ConfigureServices(services => services.AddHostedService<ArchiveService>());
     }
 }
