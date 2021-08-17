@@ -67,7 +67,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 TempData.Add(ErrorKey, "Specialists cannot subscribe.");
                 return Redirect("/Home");
             }
-            var activeAppointments = this.appointments.GetUserAppointmetsCount(userId);
+            var activeAppointments = this.appointments.GetAppointmetsCount(userId);
             if (activeAppointments > 0)
             {
                 TempData.Add(ErrorKey, "You have active appointments.");

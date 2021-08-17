@@ -30,31 +30,6 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
             return service.Id;
         }
 
-        public bool IsValidService(int serviceId)
-            => this.data.Services
-                .Any(x => x.Id == serviceId);
-
-        public bool IsValidFreeService(int serviceId)
-            => this.data.Services
-                .Where(s => s.IsFree == true)
-                .Any(x => x.Id == serviceId);
-
-        public Service GetServiceById(int serviceId)
-            => this.data.Services
-                .Where(s => s.Id == serviceId)
-                .FirstOrDefault();
-
-        public ServiceFormModel GetById(int serviceId)
-            => this.data.Services
-            .Where(s => s.Id == serviceId)
-            .Select(x => new ServiceFormModel()
-            {
-                Name = x.Name,
-                Description = x.Description,
-                IsFree = x.IsFree
-            })
-            .FirstOrDefault();
-
         public bool Edit(int id, string name, string description, bool isFree)
         {
             var medicalService = this.data.Services
@@ -74,7 +49,28 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
             return true;
         }
 
-        public ICollection<ServiceViewModel> GetAll()
+        public bool IsValidService(int serviceId, bool isFree = false)
+            => this.data.Services
+                .Where(s => s.IsFree == isFree)
+                .Any(x => x.Id == serviceId);
+
+        public ServiceFormModel GetFormModelById(int serviceId)
+             => this.data.Services
+             .Where(s => s.Id == serviceId)
+             .Select(x => new ServiceFormModel()
+             {
+                 Name = x.Name,
+                 Description = x.Description,
+                 IsFree = x.IsFree
+             })
+             .FirstOrDefault();
+
+        public Service GetById(int serviceId)
+            => this.data.Services
+                .Where(s => s.Id == serviceId)
+                .FirstOrDefault();
+
+        public ICollection<ServiceViewModel> GetListing()
             => this.data.Services
                     .OrderBy(x => x.Name)
                     .Select(x => new ServiceViewModel()
@@ -85,22 +81,13 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
                     })
                     .ToList();
 
-        public ICollection<ServiceViewFormModel> GetServices()
+        public ICollection<ServiceViewFormModel> GetServices(bool isFree = false)
             => this.data.Services
+               .Where(s => s.IsFree == isFree)
                .Select(x => new ServiceViewFormModel
                {
                    Id = x.Id,
-                   Name = x.Name
-               })
-               .ToList();
-
-        public ICollection<ServiceViewFormModel> GetFreeServices()
-            => this.data.Services
-               .Where(s => s.IsFree == true)
-               .Select(x => new ServiceViewFormModel
-               {
-                   Id = x.Id,
-                   Name = x.Name
+                   Name = x.Name,
                })
                .ToList();
     }

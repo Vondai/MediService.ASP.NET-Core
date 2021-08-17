@@ -21,7 +21,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
             => date >= DateTime.Now
                 && date <= DateTime.Now.AddMonths(1);
 
-        public int GetUserAppointmetsCount(string userId)
+        public int GetAppointmetsCount(string userId)
             => this.data
                 .Appointments
                 .Where(a => a.UserId == userId
@@ -139,7 +139,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                 })
                 .ToList();
 
-        public ICollection<AppointmentViewModel> GetUserAppointments(string userId, string specialistId = null)
+        public ICollection<AppointmentViewModel> GetActiveAppointments(string userId, string specialistId = null)
             => this.data
                 .Appointments
                 .Where(x => (specialistId != null ? x.SpecialistId == specialistId : x.UserId == userId)

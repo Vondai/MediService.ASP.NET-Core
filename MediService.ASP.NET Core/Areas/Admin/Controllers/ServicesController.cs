@@ -37,7 +37,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
 
         public IActionResult Edit(int id)
         {
-            var service = this.medicalServices.GetById(id);
+            var service = this.medicalServices.GetFormModelById(id);
             if (service == null)
             {
                 return NotFound();

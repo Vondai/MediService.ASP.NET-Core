@@ -60,7 +60,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 return View(new AppointmentFormModel()
                 {
                     Address = this.accounts.GetAddress(userId),
-                    Services = this.medicalService.GetFreeServices(),
+                    Services = this.medicalService.GetServices(true),
                 });
             }
             //Cannot make appointments if user is not a subscriber.
@@ -71,7 +71,7 @@ namespace MediService.ASP.NET_Core.Controllers
                 return Redirect("/Subscriptions/All");
             }
             //Cannot make an appointment if user has reached the maximum count of available appointments.
-            var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
+            var userAppointmentCount = this.appointments.GetAppointmetsCount(userId);
             var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
             if (userAppointmentCount == subscriptionAppointmentCount)
             {
@@ -95,7 +95,14 @@ namespace MediService.ASP.NET_Core.Controllers
             var userId = this.User.Id();
             if (!ModelState.IsValid)
             {
-                model.Services = this.medicalService.GetServices();
+                if (info == FreeAppointment)
+                {
+                    model.Services = this.medicalService.GetServices(true);
+                }
+                else
+                {
+                    model.Services = this.medicalService.GetServices();
+                }
                 return View(model);
             }
             //Check for account address
@@ -107,7 +114,7 @@ namespace MediService.ASP.NET_Core.Controllers
             bool isValidService;
             if (info == FreeAppointment)
             {
-                isValidService = this.medicalService.IsValidFreeService(model.ServiceId);
+                isValidService = this.medicalService.IsValidService(model.ServiceId, true);
             }
             else
             {
@@ -134,11 +141,11 @@ namespace MediService.ASP.NET_Core.Controllers
             {
                 if (info == FreeAppointment)
                 {
-                    model.Services = this.medicalService.GetFreeServices();
+                    model.Services = this.medicalService.GetServices(true);
                 }
                 else
                 {
-                    var userAppointmentCount = this.appointments.GetUserAppointmetsCount(userId);
+                    var userAppointmentCount = this.appointments.GetAppointmetsCount(userId);
                     var subscriptionAppointmentCount = this.subscriptions.GetSubscriptionAppointmentCount(userId);
                     model.AppointmentsLeft = subscriptionAppointmentCount - userAppointmentCount;
                     model.Services = this.medicalService.GetServices();
@@ -167,7 +174,7 @@ namespace MediService.ASP.NET_Core.Controllers
         {
             var userId = this.User.Id();
             var specialistId = this.specialists.IdByUser(userId);
-            var appointments = this.appointments.GetUserAppointments(userId, specialistId);
+            var appointments = this.appointments.GetActiveAppointments(userId, specialistId);
 
             return View(appointments);
         }

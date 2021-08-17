@@ -46,7 +46,7 @@ namespace MediService.ASP.NET_Core.Areas.Admin.Controllers
                 model.Services = this.medicalServices.GetServices();
                 return View(model);
             }
-            var mediService = this.medicalServices.GetServiceById(model.ServiceId);
+            var mediService = this.medicalServices.GetById(model.ServiceId);
             if (mediService == null)
             {
                 ModelState.AddModelError(nameof(model.ServiceId), "Invalid medical service.");

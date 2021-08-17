@@ -25,7 +25,7 @@ namespace MediService.ASP.NET_Core.Controllers
             var services = this.cache.Get<ICollection<ServiceViewModel>>(AllServicesKey);
             if (services == null)
             {
-                services = this.medicalServices.GetAll();
+                services = this.medicalServices.GetListing();
 
                 var options = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromDays(1));

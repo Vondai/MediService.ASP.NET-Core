@@ -7,7 +7,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 {
     public interface IAppointmentService
     {
-        int GetUserAppointmetsCount(string userId);
+        int GetAppointmetsCount(string userId);
 
         bool CanMakeAppointmentFromDate(DateTime date);
 
@@ -17,7 +17,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 
         ICollection<AppointmentArchiveViewModel> GetArchivedAppointments(string userId, string specialistId = null);
 
-        ICollection<AppointmentViewModel> GetUserAppointments(string userId, string specialistId = null);
+        ICollection<AppointmentViewModel> GetActiveAppointments(string userId, string specialistId = null);
 
         Task<bool> FinishAppointment(string appointmentId, string specialistId);
 

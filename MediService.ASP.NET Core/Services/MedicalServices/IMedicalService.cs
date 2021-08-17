@@ -9,20 +9,16 @@ namespace MediService.ASP.NET_Core.Services.MedicalServices
     {
         Task<int> CreateService(string name, string description, bool isFree);
 
-        Service GetServiceById(int serviceId);
-
-        ServiceFormModel GetById(int serviceId);
-
-        bool IsValidService(int serviceId);
-
-        bool IsValidFreeService(int serviceId);
-
         bool Edit(int id, string name, string description, bool isFree);
 
-        ICollection<ServiceViewModel> GetAll();
+        Service GetById(int serviceId);
 
-        ICollection<ServiceViewFormModel> GetServices();
+        ServiceFormModel GetFormModelById(int serviceId);
 
-        ICollection<ServiceViewFormModel> GetFreeServices();
+        bool IsValidService(int serviceId, bool isFree = false);
+
+        ICollection<ServiceViewModel> GetListing();
+
+        ICollection<ServiceViewFormModel> GetServices(bool isFree = false);
     }
 }
