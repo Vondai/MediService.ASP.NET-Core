@@ -75,7 +75,7 @@ namespace MediService.ASP.NET_Core.Infrastructure
                 return;
             }
             var servicesCount = data.Services.Count();
-            var usernames = new string[] { "JohnMD", "SaraNurse", "OliviaCare", "MattSurgery", "OliverRehab", "PhilNutri" };
+            var usernames = new string[] { "JohnMD", "SaraNurse", "OliviaCare", "MattSurgery", "OliverRehab", "PhilNutri", "AngelPharmacy", "NickVaccine" };
             var descriptions = new string[]
             {
                 "John Smith has worked with patients for more than 30 years.",
@@ -83,7 +83,9 @@ namespace MediService.ASP.NET_Core.Infrastructure
                 "When you need everyday care in your home Olivia Brown is here for you.",
                 "Matt River is one of the best care takers after a surgery.",
                 "Be safe with Oliver Bake.",
-                "Phil Williams will make you a personal diet plan that you can follow with ease."
+                "Phil Williams will make you a personal diet plan that you can follow with ease.",
+                "15 year pharmaceutical experience. Angel Davis is your consultant for every drug related question you may have.",
+                "Nick Miller will vaccinate you pain free."
             };
             var servicesNames = new string[]
             {
@@ -92,7 +94,9 @@ namespace MediService.ASP.NET_Core.Infrastructure
                 "Around The Clock Care",
                 "Care after Surgery",
                 "Therapy & Rehab Services",
-                "Nutritional support"
+                "Nutritional support",
+                "Pharmacist",
+                "Covid-19 Vaccination"
             };
             for (int i = 0; i < servicesCount; i++)
             {
@@ -124,20 +128,20 @@ namespace MediService.ASP.NET_Core.Infrastructure
             {
                 return;
             }
-            var servicesCount = data.Services.Count();
-            var usernames = new string[] { "JohnMD", "SaraNurse", "OliviaCare", "MattSurgery", "OliverRehab", "PhilNutri" };
-            var fullNames = new string[] { "John Smith", "Sara", "Olivia Brown", "Matt River", "Oliver Bake", "Phil Williams" };
+            //var servicesCount = data.Services.Count();
+            var usernames = new string[] { "JohnMD", "SaraNurse", "OliviaCare", "MattSurgery", "OliverRehab", "PhilNutri", "NickVaccine", "AngelPharmacy", "Test1" };
+            var fullNames = new string[] { "John Smith", "Sara", "Olivia Brown", "Matt River", "Oliver Bake", "Phil Williams", "Nick Miller", "Angel Davis", "Lary Bonk" };
             var password = "123456";
             var city = "Sofia";
             Task
                 .Run(async () =>
                 {
-                    for (int i = 0; i < servicesCount; i++)
+                    for (int i = 0; i < usernames.Length; i++)
                     {
                         var address = new Address() { City = city, FullAddress = $"1{i} some str." };
                         var user = new User
                         {
-                            Email = $"spec{i}@test.co",
+                            Email = $"{usernames[i]}@test.co",
                             FullName = fullNames[i],
                             UserName = usernames[i],
                         };
@@ -177,12 +181,14 @@ namespace MediService.ASP.NET_Core.Infrastructure
 
             data.Services.AddRange(new[]
             {
-                new Service {Name = "Doctor care", Description = "A doctor may visit you at home to diagnose and treat the illness(es). He or she may also periodically review the home health care needs."},
-                new Service {Name = "Nurse Practitioner", Description = "Delivery of comprehensive health care in the comfort of your own home."},
-                new Service {Name = "Around The Clock Care", Description = "All the care and support you need, in the home you love."},
-                new Service {Name = "Care after Surgery", Description = "By your side, providing peace of mind and care."},
+                new Service {Name = "Doctor care", Description = "A doctor may visit you at home to diagnose and treat the illness(es). He or she may also periodically review the home health care needs.", IsFree = false},
+                new Service {Name = "Nurse Practitioner", Description = "Delivery of comprehensive health care in the comfort of your own home.", IsFree = false},
+                new Service {Name = "Around The Clock Care", Description = "All the care and support you need, in the home you love.", IsFree = false},
+                new Service {Name = "Care after Surgery", Description = "By your side, providing peace of mind and care.", IsFree = false},
                 new Service {Name = "Therapy & Rehab Services", Description = "Therapy and Rehab Services at home."},
-                new Service {Name = "Nutritional support", Description = "Dietitians can come to a patient's home to provide dietary assessments and guidance to support the treatment plan."},
+                new Service {Name = "Nutritional support", Description = "Dietitians can come to a patient's home to provide dietary assessments and guidance to support the treatment plan.", IsFree = false},
+                new Service {Name = "Pharmacist", Description="Consultant for drug related questions. Side effects and treatment.", IsFree = false},
+                new Service {Name = "Covid-19 Vaccination", Description="Get your vaccination shot pain free.", IsFree = true}
             });
 
             data.SaveChanges();
