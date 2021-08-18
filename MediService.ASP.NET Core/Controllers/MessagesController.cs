@@ -71,6 +71,37 @@ namespace MediService.ASP.NET_Core.Controllers
             return Redirect("/Appointments/Mine");
         }
 
+        public IActionResult Mine()
+        {
+            var messages = this.messages.GetListing(this.User.Id());
+
+            return View(messages);
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            var message = this.messages.GetById(id);
+            if (message == null)
+            {
+                return NotFound();
+            }
+            await this.messages.MarkAsSeen(id);
+            return View(message);
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            var isDeleted = await this.messages.DeleteById(id);
+
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+
+            TempData.Add(SuccessKey, "Message successfuly deleted.");
+            return Redirect("/Messages/Mine");
+        }
+
         public int GetCount()
         {
             var newMessages = this.messages.GetCountNew(this.User.Id());

@@ -1,0 +1,32 @@
+﻿@model MessageDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container">
+    <h2 class="heading-margin text-center text-warning font-weight-bolder">Message Details</h2>
+    <div class="card col-sm-12 offset-lg-2 col-lg-8 bg-light border border-warning">
+        <article class="card-body p-5">
+            <dl class="param text-center">
+                <dt class="text-warning font-weight-bolder">Title</dt>
+                <dd class="font-weight-bolder">@Model.Title</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt class="text-warning font-weight-bolder">Content</dt>
+                <dd class="font-weight-bolder">@Model.Content</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt class="text-warning font-weight-bolder">Sent</dt>
+                <dd class="font-weight-bolder">@Model.Sent</dd>
+            </dl>
+            <dl class="param text-center">
+                <dt class="text-warning font-weight-bolder">Send by</dt>
+                <dd class="font-weight-bolder">@Model.Sender</dd>
+            </dl>
+            <hr>
+            <a href="/Messages/Delete?id=@Model.Id" class="btn btn-lg btn-danger text-center">Delete Message</a>
+            <a href="/Messages/Mine" class="btn btn-lg btn-warning text-center">Back</a>
+        </article>
+    </div>
+</div>

@@ -101,7 +101,7 @@ namespace MediService.ASP.NET_Core.Services.Appointments
                 .Select(x => new AppointmentDetailsViewModel()
                 {
                     Id = x.Id,
-                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy HH:MM"),
+                    Date = x.Date.ToLocalTime().ToString("MM-dd-yyyy HH:mm"),
                     AdditionalInfo = x.AdditionalInfo,
                     Address = x.User.Addresses
                     .Select(address => address.FullAddress)

@@ -1,0 +1,37 @@
+﻿@model List<MessageListingViewModel>
+@{
+    ViewData["Title"] = "My Messages";
+}
+
+<div class="container">
+    <h2 class="heading-margin text-center text-warning font-weight-bolder">My messsages</h2>
+    @if (!Model.Any())
+    {
+        <h2 class="text-center text-primary p-2">You do not have any messages.</h2>
+    }
+    else
+    {
+        <table class="table table-primary table-bordered col-sm-10 offset-lg-2 col-lg-8 offset-xl-1 col-xl-10">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">Title</th>
+                    <th class="text-center" scope="col">Sender</th>
+                    <th class="text-center" scope="col">Sent</th>
+                    <th class="text-center" colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var message in Model)
+                {
+                    <tr class=@(message.IsSeen ? "table-secondary" : "table-dark")>
+                        <td class="text-center">@message.Title</td>
+                        <td class="text-center">@message.Sender</td>
+                        <td class="text-center">@message.Sent</td>
+                        <td class="text-center"><a class="btn btn-warning" href="/Messages/Details?id=@message.Id">Open</a></td>
+                        <td class="text-center"><a class="btn btn-danger" href="/Messages/Delete?id=@message.Id">Delete</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
