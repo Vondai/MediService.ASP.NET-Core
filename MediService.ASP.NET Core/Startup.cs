@@ -16,6 +16,7 @@ using MediService.ASP.NET_Core.Services.Appointments;
 using MediService.ASP.NET_Core.Services.Accounts;
 using MediService.ASP.NET_Core.Areas.Admin.Services;
 using MediService.ASP.NET_Core.Services.Hosting;
+using MediService.ASP.NET_Core.Services.Messages;
 
 namespace MediService.ASP.NET_Core
 {
@@ -57,6 +58,7 @@ namespace MediService.ASP.NET_Core
             services.AddTransient<IAppointmentService, AppointmentService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IMessageService, MessageService>();
             services.AddSingleton<IWorker, Worker>();
             //services.AddHostedService<ArchiveService>();
         }

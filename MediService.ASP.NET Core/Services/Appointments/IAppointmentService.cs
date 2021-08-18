@@ -7,6 +7,10 @@ namespace MediService.ASP.NET_Core.Services.Appointments
 {
     public interface IAppointmentService
     {
+        bool IsValid(string appointmentId);
+
+        AppointmentServiceModel GetById(string appointmentId);
+
         int GetAppointmetsCount(string userId);
 
         bool CanMakeAppointmentFromDate(DateTime date);

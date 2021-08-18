@@ -42,6 +42,10 @@
                     <a class="p-2 text-dark font-weight-bolder" href="/Reviews/Create">Rate us</a>
                 }
                 <a class="p-2 text-dark font-weight-bolder" href="/Home/Faq">F.A.Q</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="p-3 text-dark font-italic font-weight-bolder" href="/Messages/Mine">Messages (<span id="newMessagesCount" class="text-warning"></span>)</a>
+                }
             </nav>
             @if (isAdmin)
             {
@@ -95,6 +99,14 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        window.onload = async function setMessageCount() {
+            let count = await jQuery.ajax("/Messages/GetCount");
+            let newMessagesCountElement = document.getElementById("newMessagesCount");
+            console.log(count);
+            newMessagesCountElement.innerHTML = count;
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

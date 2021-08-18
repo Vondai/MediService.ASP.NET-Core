@@ -17,6 +17,25 @@ namespace MediService.ASP.NET_Core.Services.Appointments
             this.data = data;
         }
 
+        public bool IsValid(string appointmentId)
+            => this.data
+                .Appointments
+                .Any(a => a.Id == appointmentId);
+
+        public AppointmentServiceModel GetById(string appointmentId)
+            => this.data
+                .Appointments
+                .Where(a => a.Id == appointmentId)
+                .Select(x => new AppointmentServiceModel()
+                {
+                    SpecialistUserId = x.Specialist.User.Id,
+                    SpecialistFullName = x.Specialist.User.FullName,
+                    UserId = x.UserId,
+                    UserFullName = x.User.FullName
+                })
+                .FirstOrDefault();
+
+
         public bool CanMakeAppointmentFromDate(DateTime date)
             => date >= DateTime.Now
                 && date <= DateTime.Now.AddMonths(1);

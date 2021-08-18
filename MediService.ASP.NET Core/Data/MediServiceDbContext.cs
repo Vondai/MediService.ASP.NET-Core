@@ -58,6 +58,11 @@ namespace MediService.ASP.NET_Core.Data
                 .HasForeignKey<Specialist>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Recipient)
+                .WithMany(m => m.Messages)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
 
         }

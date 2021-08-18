@@ -64,5 +64,11 @@
 
         //Appointment
         public const int AppointmentInfoMaxLength = 200;
+
+        //Messages
+        public const int MessageTitleMinLength = 5;
+        public const int MessageTitleMaxLength = 20;
+        public const int MessageContentMinLength = 10;
+        public const int MessageContentMaxLength = 200;
     }
 }
