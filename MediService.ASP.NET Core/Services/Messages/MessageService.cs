@@ -76,7 +76,7 @@ namespace MediService.ASP.NET_Core.Services.Messages
             => this.data
                 .Messages
                 .Where(m => m.RecipientId == userId)
-                .OrderBy(m => m.Sent)
+                .OrderByDescending(m => m.Sent)
                 .Select(x => new MessageListingViewModel()
                 {
                     Id = x.Id,
